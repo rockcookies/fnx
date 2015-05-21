@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 				globalModules : pkg.modules
 			},
 			'all' : {
-				dest : './dest/fnx-pack.js'
+				dest : './dest/fnx.js'
 			},
 			'switchable': {
 				modules : ['switchable/switchable', 'switchable/carousel', 'switchable/slide'],
@@ -45,12 +45,12 @@ module.exports = function(grunt) {
 				}
             },
             'all': {
-                src: './dest/fnx-pack.js',
-                dest: './dest/fnx-pack-min.js'
+                src: './dest/fnx.js',
+                dest: './dest/fnx.min.js'
             },
             'switchable': {
             	src: './dest/fnx-switchable.js',
-                dest: './dest/fnx-switchable-min.js'
+                dest: './dest/fnx-switchable.min.js'
             }
         },
 		fnxbuild : {
