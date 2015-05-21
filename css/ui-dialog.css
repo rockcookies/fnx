@@ -1,0 +1,136 @@
+.ui-dialog {
+	*zoom:1;
+	_float: left;
+	position: relative;
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#88000000, endColorstr=#88000000);
+	background-color: rgba(0, 0, 0, 0.5);
+	padding: 6px;
+	outline: none;
+	border: none;
+	/* http://ued.taobao.com/blog/2011/04/onfocus-this-blur/ */
+	font-size:12px;
+}
+
+:root .ui-dialog {
+    FILTER: none\9;
+}
+
+.ui-dialog-header {
+    white-space: nowrap;
+    border-bottom:1px solid #E1E1E1;
+}
+
+.ui-dialog-title {
+    height:45px;
+    font-size:16px;
+    font-family:'微软雅黑', '黑体', Arial;
+    line-height:46px;
+    color:#4d4d4d;
+    text-indent: 20px;
+    background-color: #f9f9f9;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcfcfc), to(#f9f9f9));
+    background: -moz-linear-gradient(top, #fcfcfc, #f9f9f9);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f9f9f9');
+    background:-o-linear-gradient(top, #fcfcfc, #f9f9f9);
+    background: -ms-linear-gradient(top, #fcfcfc, #f9f9f9);
+    background: linear-gradient(top, #fcfcfc, #f9f9f9);
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ui-dialog-close {
+    color: #999;
+    cursor: pointer;
+    display: block;
+    font-family: tahoma;
+    font-size: 24px;
+    font-weight: bold;
+    height: 18px;
+    line-height: 14px;
+    position: absolute;
+    right: 16px;
+    text-decoration: none;
+    top: 16px;
+    z-index: 10;
+}
+.ui-dialog-close:hover {
+    color: #666;
+    text-shadow: 0 0 2px #aaa;
+    text-decoration: none;
+}
+.ui-dialog-grid {
+    width: auto;
+    margin: 0;
+    border: 0 none;
+    border-collapse:collapse;
+    border-spacing: 0;
+	background:#fff;
+}
+
+.ui-dialog-body {
+    padding: 15px;
+    text-align: center;
+}
+.ui-dialog-content {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    *zoom: 1;
+    *display: inline;
+    text-align: left;
+}
+
+.ui-dialog-footer {
+    padding: 0 15px 15px 15px;
+    zoom:1;
+}
+
+.ui-dialog-button-item{
+	display: inline;
+	margin-right: 4px;
+}
+
+.ui-dialog-button{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 0 12px;
+    line-height:22px;
+    height:23px;
+    *overflow: visible; /* for a ie6/7 bug http://blog.csdn.net/jyy_12/article/details/6636099 */
+    background-image: none;
+}
+
+.ui-dialog-button:hover{
+	text-decoration: none;
+}
+
+.ui-dialog-button-orange {
+    color: #fff;
+    border:1px solid #d66500;
+    background-color: #f57403;
+}
+
+.ui-dialog-button-orange:hover {
+    background-color: #fb8318;
+}
+
+.ui-dialog-button-white {
+    border:1px solid #afafaf;
+    background-color: #f3f3f3;
+    color: #777;
+}
+
+.ui-dialog-button-white:hover {
+    border: 1px solid #8e8e8e;
+    background-color: #fcfbfb;
+    color: #676d70;
+}

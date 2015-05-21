@@ -1,0 +1,72 @@
+{
+	"name" : "FNX-UI",
+	"desc" : "强悍、高性能的前端组件库，让web开发更迅速、简单。",
+	"author": "by FNX-UI Team",
+	"email": "hqy321@gmail.com",
+	"version" : "0.0.2",
+	"dependencies": {},
+	"modules":{
+			"class/class" : {
+			"src" : "./class/class"
+		},
+			"events/events" : {
+			"src" : "./events/events"
+		},
+			"base/base" : {
+			"src" : "./base/base"
+		},
+			"position/position" : {
+			"src" : "./position/position"
+		},
+			"iframe-shim/iframe-shim" : {
+			"src" : "./iframe-shim/iframe-shim"
+		},
+			"widget/widget" : {
+			"src" : "./widget/widget"
+		},
+			"overlay/overlay" : {
+			"src" : "./overlay/overlay"
+		},
+			"overlay/mask" : {
+			"src" : "./overlay/mask"
+		},
+			"templatable/templatable" : {
+			"src" : "./templatable/templatable"
+		},
+			"popup/popup" : {
+			"src" : "./popup/popup"
+		},
+			"popup/dialog" : {
+			"src" : "./popup/dialog"
+		},
+			"messager/messager" : {
+			"src" : "./messager/messager"
+		},
+			"easing/easing" : {
+			"src" : "./easing/easing"
+		},
+			"switchable/switchable" : {
+			"src" : "./switchable/switchable"
+		},
+			"switchable/slide" : {
+			"src" : "./switchable/slide"
+		},
+			"switchable/carousel" : {
+			"src" : "./switchable/carousel"
+		},
+			"calendar/dateparser" : {
+			"src" : "calendar/dateparser"
+		},
+			"calendar/calendar" : {
+			"src" : "calendar/calendar"
+		}
+	},
+	"devDependencies": {
+		"express": "4.12.x",
+		"serve-index": "1.6.x",
+		"grunt-contrib-uglify": "0.9.x",
+		"grunt-express-server": "0.5.x",
+		"grunt-contrib-watch": "0.6.x",
+		"grunt": "0.4.x"
+	}
+}
