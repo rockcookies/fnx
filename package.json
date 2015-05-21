@@ -3,7 +3,7 @@
 	"desc" : "强悍、高性能的前端组件库，让web开发更迅速、简单。",
 	"author": "by FNX-UI Team",
 	"email": "hqy321@gmail.com",
-	"version" : "0.0.2",
+	"version" : "1.0.0",
 	"dependencies": {},
 	"modules":{
 			"class/class" : {
@@ -15,23 +15,26 @@
 			"base/base" : {
 			"src" : "./base/base"
 		},
+			"widget/widget" : {
+			"src" : "./widget/widget"
+		},
 			"position/position" : {
 			"src" : "./position/position"
 		},
+			"templatable/templatable" : {
+			"src" : "./templatable/templatable"
+		},
+			"easing/easing" : {
+			"src" : "./easing/easing"
+		},
 			"iframe-shim/iframe-shim" : {
 			"src" : "./iframe-shim/iframe-shim"
-		},
-			"widget/widget" : {
-			"src" : "./widget/widget"
 		},
 			"overlay/overlay" : {
 			"src" : "./overlay/overlay"
 		},
 			"overlay/mask" : {
 			"src" : "./overlay/mask"
-		},
-			"templatable/templatable" : {
-			"src" : "./templatable/templatable"
 		},
 			"popup/popup" : {
 			"src" : "./popup/popup"
@@ -41,9 +44,6 @@
 		},
 			"messager/messager" : {
 			"src" : "./messager/messager"
-		},
-			"easing/easing" : {
-			"src" : "./easing/easing"
 		},
 			"switchable/switchable" : {
 			"src" : "./switchable/switchable"
