@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Combobox 示例-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../../static/css/site.css" />
+ <link rel="stylesheet" href="../../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../../" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../../">首页</a></li>
+				<li><a href="../../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Combobox 示例</h1>
+		<p>Combobox 基本示例。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<style>
+.fn-hide, .ui-popup {
+    display: none;
+}
+.ui-popup {
+    border: 1px solid #CCC;
+    padding: 3px 5px;
+    background: #EEE;
+    margin: 0;
+}
+.ui-popup li {
+    list-style: none;
+}
+</style>
+
+<h1 id="1-默认行为与表现">1. 默认行为与表现<a href="#1-默认行为与表现" class="anchor">¶</a></h1><blockquote>
+<p>默认行为通过 hover 触发，可以不用传递参数 triggerType</p>
+</blockquote>
+<div class="popup">
+    <a href="#popup2" id="triggerId2">下拉框<span class="icon">▼</span></a>
+    <ul class="fn-hide ui-popup" id="popup2">
+        <li><a href="javascript:;">内容1</a></li>
+        <li><a href="javascript:;">内容2</a></li>
+        <li><a href="javascript:;">内容3</a></li>
+        <li><a href="javascript:;">内容4</a></li>
+    </ul>
+</div>
+
+<h2 id="源码">源码<a href="#源码" class="anchor">¶</a></h2><script>var Combobox = FNX.include('combobox/combobox');
+
+var example2 = new Combobox({
+    trigger: '#triggerId2',
+    element: '#popup2',
+    align: {
+        baseXY: [0, 0]
+    }
+});
+
+// 订阅事件
+example2.after('show', function(){
+    console.log('example2 is shown');
+}).after('hide', function(){
+    console.log('example2 is hidden');
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">var</span> example2 = <span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId2'</span>,
+    element: <span class="string">'#popup2'</span>,
+    align: {
+        baseXY: [<span class="number">0</span>, <span class="number">0</span>]
+    }
+});
+
+<span class="comment">// 订阅事件</span>
+example2.after(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    console.log(<span class="string">'example2 is shown'</span>);
+}).after(<span class="string">'hide'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    console.log(<span class="string">'example2 is hidden'</span>);
+});</code></pre></div><h1 id="2-自定义行为-click">2. 自定义行为(click)<a href="#2-自定义行为-click" class="anchor">¶</a></h1><div class="popup">
+    <a href="javascript:;" id="triggerId3">下拉框<span class="icon">▼</span></a>
+    <ul class="fn-hide ui-popup" id="popup3">
+        <li><a href="javascript:;">内容1</a></li>
+        <li><a href="javascript:;">内容2</a></li>
+        <li><a href="javascript:;">内容3</a></li>
+        <li><a href="javascript:;">内容4</a></li>
+    </ul>
+</div>
+
+<h2 id="源码2">源码<a href="#源码2" class="anchor">¶</a></h2><script>var Combobox = FNX.include('combobox/combobox');
+
+var example3 = new Combobox({
+    trigger: '#triggerId3',
+    triggerType: 'click',
+    align: {
+        baseXY: [0, -80]
+    },
+    element: '#popup3'
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">var</span> example3 = <span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId3'</span>,
+    triggerType: <span class="string">'click'</span>,
+    align: {
+        baseXY: [<span class="number">0</span>, -<span class="number">80</span>]
+    },
+    element: <span class="string">'#popup3'</span>
+});</code></pre></div><h1 id="3-自定义template、align并设置回调函数">3. 自定义Template、Align并设置回调函数<a href="#3-自定义template、align并设置回调函数" class="anchor">¶</a></h1><div class="popup">
+    <a href="#" id="triggerId4">下拉框<span class="icon">▼</span></a>
+</div>
+
+<h2 id="源码3">源码<a href="#源码3" class="anchor">¶</a></h2><script>var Combobox = FNX.include('combobox/combobox');
+
+var example4 = new Combobox({
+    trigger: '#triggerId4',
+    align: {
+        selfXY: [-10,-10],
+        baseXY: [0,20]
+    },
+    template: '<div class="ui-popup fn-hide"><ul><li>1</li><li>2</li><li>3</li><li>4</li></ul></div>'
+});
+
+example4.after('show', function(){
+    $('#triggerId4').text('三秒后改变浮层位置');
+    window.setTimeout(function() {
+        example4.set('align', { baseXY: [0, -115] });
+    }, 3000);
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">var</span> example4 = <span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId4'</span>,
+    align: {
+        selfXY: [-<span class="number">10</span>,-<span class="number">10</span>],
+        baseXY: [<span class="number">0</span>,<span class="number">20</span>]
+    },
+    template: <span class="string">'&lt;div class="ui-popup fn-hide"&gt;&lt;ul&gt;&lt;li&gt;1&lt;/li&gt;&lt;li&gt;2&lt;/li&gt;&lt;li&gt;3&lt;/li&gt;&lt;li&gt;4&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;'</span>
+});
+
+example4.after(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    $(<span class="string">'#triggerId4'</span>).text(<span class="string">'三秒后改变浮层位置'</span>);
+    window.setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        example4.set(<span class="string">'align'</span>, { baseXY: [<span class="number">0</span>, -<span class="number">115</span>] });
+    }, <span class="number">3000</span>);
+});</code></pre></div><h1 id="4-简单的自动完成组件">4. 简单的自动完成组件<a href="#4-简单的自动完成组件" class="anchor">¶</a></h1><div class="popup">
+    <input id="triggerId5" placeholder="请输入..." />
+    <ul class="fn-hide ui-popup" id="popup5">
+        <li><a href="javascript:;">内容1</a></li>
+        <li><a href="javascript:;">内容2</a></li>
+        <li><a href="javascript:;">内容3</a></li>
+        <li><a href="javascript:;">内容4</a></li>
+    </ul>
+</div>
+
+<h2 id="源码4">源码<a href="#源码4" class="anchor">¶</a></h2><script>var Combobox = FNX.include('combobox/combobox');
+
+var example5 = new Combobox({
+    trigger: '#triggerId5',
+    triggerType: 'focus',
+    element: '#popup5',
+    align: {
+        baseXY: [0, '100%+12']
+    }
+});
+example5.element.find('a').click(function(e) {
+    e.preventDefault();
+    example5.get('trigger').val($(this).text());
+    example5.hide();
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">var</span> example5 = <span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId5'</span>,
+    triggerType: <span class="string">'focus'</span>,
+    element: <span class="string">'#popup5'</span>,
+    align: {
+        baseXY: [<span class="number">0</span>, <span class="string">'100%+12'</span>]
+    }
+});
+example5.element.find(<span class="string">'a'</span>).click(<span class="function"><span class="keyword">function</span><span class="params">(e)</span> {</span>
+    e.preventDefault();
+    example5.get(<span class="string">'trigger'</span>).val($(<span class="keyword">this</span>).text());
+    example5.hide();
+});</code></pre></div><h1 id="5-手动调用show方法">5: 手动调用show方法<a href="#5-手动调用show方法" class="anchor">¶</a></h1><div class="popup">
+    <a id="triggerId6">下拉框<span class="icon">▼</span></a>
+    <ul class="fn-hide ui-popup" id="popup6">
+        <li><a href="javascript:;">内容1</a></li>
+        <li><a href="javascript:;">内容2</a></li>
+        <li><a href="javascript:;">内容3</a></li>
+        <li><a href="javascript:;">内容4</a></li>
+    </ul>
+</div>
+
+<h2 id="源码5">源码<a href="#源码5" class="anchor">¶</a></h2><script>var Combobox = FNX.include('combobox/combobox');
+
+new Combobox({
+    trigger: '#triggerId6',
+    element: '#popup6'
+}).show();</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId6'</span>,
+    element: <span class="string">'#popup6'</span>
+}).show();</code></pre></div><h1 id="6-相对别的元素定位">6: 相对别的元素定位<a href="#6-相对别的元素定位" class="anchor">¶</a></h1><div class="popup">
+    <a id="triggerId7">下拉框<span class="icon">▼</span></a>
+    <ul class="fn-hide ui-popup" id="popup7">
+        <li><a href="javascript:;">内容1</a></li>
+        <li><a href="javascript:;">内容2</a></li>
+        <li><a href="javascript:;">内容3</a></li>
+        <li><a href="javascript:;">内容4</a></li>
+    </ul>
+    <p id="other-element">别的元素</p>
+</div>
+
+<h2 id="源码6">源码<a href="#源码6" class="anchor">¶</a></h2><script>var Combobox = FNX.include('combobox/combobox');
+
+new Combobox({
+    trigger: '#triggerId7',
+    element: '#popup7',
+    align: {
+        baseElement: '#other-element'
+    }
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId7'</span>,
+    element: <span class="string">'#popup7'</span>,
+    align: {
+        baseElement: <span class="string">'#other-element'</span>
+    }
+});</code></pre></div><h1 id="7-异步的情况">7: 异步的情况<a href="#7-异步的情况" class="anchor">¶</a></h1><p>一般适用于 Ajax 请求成功后再显示浮层的情况。</p>
+<div class="popup">
+    <a id="triggerId9">点击后一秒出现<span class="icon">▼</span></a>
+    <ul class="fn-hide ui-popup" id="popup9">
+        <li><a href="javascript:;">内容1</a></li>
+        <li><a href="javascript:;">内容2</a></li>
+        <li><a href="javascript:;">内容3</a></li>
+        <li><a href="javascript:;">内容4</a></li>
+    </ul>
+</div>
+
+
+<h2 id="源码7">源码<a href="#源码7" class="anchor">¶</a></h2><script>var Combobox = FNX.include('combobox/combobox');
+
+var popup = new Combobox({
+    trigger: '#triggerId9',
+    element: '#popup9',
+    triggerType: 'click'
+});
+popup.after('show', function() {
+    var that = this;
+    // 先隐藏
+    this.element.hide();
+
+    // 然后异步显示，这里也可以是一段 Ajax 的回调
+    setTimeout(function() {
+        that.element.fadeIn();
+    }, 1000);
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">var</span> popup = <span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId9'</span>,
+    element: <span class="string">'#popup9'</span>,
+    triggerType: <span class="string">'click'</span>
+});
+popup.after(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="keyword">var</span> that = <span class="keyword">this</span>;
+    <span class="comment">// 先隐藏</span>
+    <span class="keyword">this</span>.element.hide();
+
+    <span class="comment">// 然后异步显示，这里也可以是一段 Ajax 的回调</span>
+    setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        that.element.fadeIn();
+    }, <span class="number">1000</span>);
+});</code></pre></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

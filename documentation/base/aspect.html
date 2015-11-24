@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Aspect 使用文档-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Aspect 使用文档</h1>
+		<p>使用 Aspect，可以允许你在指定方法执行的前后插入特定函数。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<h1 id="after-before-与-on-的含义冲突">after / before 与 on 的含义冲突<a href="#after-before-与-on-的含义冲突" class="anchor">¶</a></h1><h2 id="events-模块中">events 模块中<a href="#events-模块中" class="anchor">¶</a></h2><p>on 的第一个参数是 eventType, 比如 click, complete 等，需要调用 trigger 主动触发</p>
+<h2 id="aspect-模块中">aspect 模块中<a href="#aspect-模块中" class="anchor">¶</a></h2><p>after / before 的第一个参数是当前实例上的 methodName</p>
+<h2 id="异同">异同<a href="#异同" class="anchor">¶</a></h2><p>on 是纯粹注册一个事件</p>
+<p>after / before 在第一次调用时，还担当了将 methodName 包裹起来的作用，在包裹后，调用 method 时，会自动触发 <code>before:methodName</code> 和 <code>after:methodName</code> 事件</p>
+<p>可以看出，after / before 的参数以及第一次调用时的行为，都与 on 是不同的。</p>
+<p>更直白的理解是，<code>after(type, fn)</code> 应该是在 type 事件触发前，先触发 fn. 含义类似 YUI3 里的 custom event 提供的 after / before</p>
+<h2 id="取舍">取舍<a href="#取舍" class="anchor">¶</a></h2><p>我们该如何取舍？想到几种选择：</p>
+<p>保留现有 api，就让 after / before 与 on 存在不一致。</p>
+<p>将 after 和 before 改名为 afterMethod / beforeMetohd, 让其含义更直白。</p>
+<p>不将 after 和 before 混入 Base，独立出来，成为一个纯粹的 Aspect 模块，调用时使用：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Aspect = FNX.include(<span class="string">'base/aspect'</span>);
+
+Aspect.before(object, methodName, callback, context, arg*)
+Aspect.after(object, methodName, callback, context, arg*)</code></pre></div><p>第三种方式，是很纯粹的 AOP接口，可以进一步提供更多更强大的功能，还有个很大的好处是，object 参数也可以是一个 Class。</p>
+<p>第三种方式的不足之处：普通应用场景下，使用起来有点蛋疼，不如现有的方式。</p>
+<h2 id="一些资料">一些资料<a href="#一些资料" class="anchor">¶</a></h2><ul>
+<li><a href="http://yuilibrary.com/yui/docs/api/classes/Do.html"><a href="http://yuilibrary.com/yui/docs/api/classes/Do.html">http://yuilibrary.com/yui/docs/api/classes/Do.html</a></a></li>
+<li><a href="http://code.google.com/p/jquery-aop/"><a href="http://code.google.com/p/jquery-aop/">http://code.google.com/p/jquery-aop/</a></a></li>
+<li><a href="http://lazutkin.com/blog/2008/may/18/aop-aspect-javascript-dojo/"><a href="http://lazutkin.com/blog/2008/may/18/aop-aspect-javascript-dojo/">http://lazutkin.com/blog/2008/may/18/aop-aspect-javascript-dojo/</a></a></li>
+</ul>
+<h1 id="使用说明">使用说明<a href="#使用说明" class="anchor">¶</a></h1><p>基于 <code>Base.extend</code> 创建的类，会自动添加上 <code>Aspect</code> 提供的功能。</p>
+<h2 id="before-object-before-methodname-callback-context">before <code>object.before(methodName, callback, [context])</code><a href="#before-object-before-methodname-callback-context" class="anchor">¶</a></h2><p>在 <code>object[methodName]</code> 方法执行前，先执行 <code>callback</code> 函数。</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Dialog = Base.extend({
+    ...
+
+    show: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        console.log(<span class="number">2</span>);
+        <span class="keyword">this</span>.element.show();
+    },
+
+    ...
+});
+
+<span class="keyword">var</span> dialog = <span class="keyword">new</span> Dialog();
+
+dialog.before(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    console.log(<span class="number">1</span>);
+});
+
+dialog.after(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    console.log(<span class="number">3</span>);
+});
+
+dialog.show(); <span class="comment">// ==&gt; 1, 2, 3</span></code></pre></div><p><code>callback</code> 函数在执行时，接收的参数与传给 <code>object[methodName]</code> 参数相同。如果传入了
+<code>context</code> 参数，则 <code>callback</code> 里的 <code>this</code> 指向 <code>context</code>。</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> dialog = <span class="keyword">new</span> Dialog();
+
+dialog.before(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">(a, b)</span> {</span>
+    console.log(a);
+    console.log(b);
+});
+
+dialog.show(<span class="number">1</span>, <span class="number">2</span>); <span class="comment">// ==&gt; 1, 2</span></code></pre></div><p><strong>可以在 <code>callback</code> 中 return false 来阻止原函数执行。</strong></p>
+<div class="highlight"><pre><code class="javascript">dialog.before(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    console.log(<span class="number">1</span>);
+    <span class="keyword">return</span> <span class="literal">false</span>;
+});
+
+dialog.after(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    console.log(<span class="number">3</span>);
+});
+
+dialog.show(); <span class="comment">// ==&gt; 1</span></code></pre></div><h2 id="after-object-after-methodname-callback-context">after <code>object.after(methodName, callback, [context])</code><a href="#after-object-after-methodname-callback-context" class="anchor">¶</a></h2><p>在 <code>object[methodName]</code> 方法执行后，再执行 <code>callback</code> 函数。</p>
+<p><code>callback</code> 函数在执行时，接收的参数是 <code>object[methodName]</code> 执行完成后的返回值以及传给 <code>object[methodName]</code> 的参数。如果传入了
+<code>context</code> 参数，则 <code>callback</code> 里的 <code>this</code> 指向 <code>context</code>。</p>
+<pre>var dialog = new Dialog();
+
+dialog.after(&#39;show&#39;, function(returned, a, b) {
+    console.log(returned); // show 的返回值
+    console.log(a);
+    console.log(b);
+});
+
+dialog.show(1, 2); // ==&gt; undefined, 1, 2</pre><p><strong>注意</strong></p>
+<p><code>before</code> 和 <code>after</code> 是按注册的先后顺序执行的，先注册先执行。</p>
+<div class="highlight"><pre><code class="javascript">dialog.before(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    console.log(<span class="number">1</span>);
+});
+
+dialog.before(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    console.log(<span class="number">2</span>);
+});
+
+dialog.show(); <span class="comment">// ==&gt; 1, 2</span></code></pre></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

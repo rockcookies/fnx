@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Popup 示例-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../../static/css/site.css" />
+ <link rel="stylesheet" href="../../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../../" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../../">首页</a></li>
+				<li><a href="../../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Popup 示例</h1>
+		<p>Popup 各属性的使用。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<p>弹出层使用以下样式</p>
+<style type="text/css">
+.popup {
+    padding: 20px;
+    *zoom:1;
+    _float: left;
+    position: relative;
+    background-color: #FFF;
+    border: 1px solid #999;
+    outline: 0;
+    background-clip: padding-box;
+    font-family: Helvetica, arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #333;
+}</style><div class="highlight"><pre><code class="css">
+<span class="class">.popup</span> <span class="rules">{
+    <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">20</span>px</span></span>;
+    <span class="rule">*<span class="attribute">zoom</span>:<span class="value"><span class="number">1</span></span></span>;
+    <span class="rule"><span class="attribute">_float</span>:<span class="value"> left</span></span>;
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;
+    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#FFF</span></span></span>;
+    <span class="rule"><span class="attribute">border</span>:<span class="value"> <span class="number">1</span>px solid <span class="hexcolor">#999</span></span></span>;
+    <span class="rule"><span class="attribute">outline</span>:<span class="value"> <span class="number">0</span></span></span>;
+    <span class="rule"><span class="attribute">background-clip</span>:<span class="value"> padding-box</span></span>;
+    <span class="rule"><span class="attribute">font-family</span>:<span class="value"> Helvetica, arial, sans-serif</span></span>;
+    <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">14</span>px</span></span>;
+    <span class="rule"><span class="attribute">line-height</span>:<span class="value"> <span class="number">1.428571429</span></span></span>;
+    <span class="rule"><span class="attribute">color</span>:<span class="value"> <span class="hexcolor">#333</span></span></span>;
+<span class="rule">}</span></span></code></pre></div><h1 id="1-没有遮罩层">1. 没有遮罩层<a href="#1-没有遮罩层" class="anchor">¶</a></h1><button id="example1">没有遮罩层</button>
+
+<script>var Popup = FNX.include('popup/popup');
+
+var example = new Popup({
+    hasMask: false,
+    className: 'popup',
+    template: '<div>没有遮罩层</div>'
+});
+
+$('#example1').click(function () {
+    example.show();
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Popup = FNX.include(<span class="string">'popup/popup'</span>);
+
+<span class="keyword">var</span> example = <span class="keyword">new</span> Popup({
+    hasMask: <span class="literal">false</span>,
+    className: <span class="string">'popup'</span>,
+    template: <span class="string">'&lt;div&gt;没有遮罩层&lt;/div&gt;'</span>
+});
+
+$(<span class="string">'#example1'</span>).click(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+    example.show();
+});</code></pre></div><h1 id="2-自定义位置">2. 自定义位置<a href="#2-自定义位置" class="anchor">¶</a></h1><button id="example2-1">位置靠近顶部</button>
+<button id="example2-2">位置在本按钮下方</button>
+
+<script>var Popup = FNX.include('popup/popup');
+
+var example2_1 = new Popup({
+    align: {
+        baseXY: ['50%', 0],
+        selfXY: ['50%', 0]
+    },
+    className: 'popup',
+    template: '<div>位置靠近顶部</div>'
+});
+
+var example2_2 = new Popup({
+    hasMask: true,
+    align: {
+        baseElement: '#example2-2',
+        baseXY: [0, '100%'],
+        selfXY: [0, 0]
+    },
+    className: 'popup',
+    template: '<div>位置在本按钮下方</div>'
+});
+
+
+$('#example2-1').click(function () {
+    example2_1.show();
+});
+
+$('#example2-2').click(function () {
+    example2_2.show();
+});</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Popup = FNX.include(<span class="string">'popup/popup'</span>);
+
+<span class="keyword">var</span> example2_1 = <span class="keyword">new</span> Popup({
+    align: {
+        baseXY: [<span class="string">'50%'</span>, <span class="number">0</span>],
+        selfXY: [<span class="string">'50%'</span>, <span class="number">0</span>]
+    },
+    className: <span class="string">'popup'</span>,
+    template: <span class="string">'&lt;div&gt;位置靠近顶部&lt;/div&gt;'</span>
+});
+
+<span class="keyword">var</span> example2_2 = <span class="keyword">new</span> Popup({
+    hasMask: <span class="literal">true</span>,
+    align: {
+        baseElement: <span class="string">'#example2-2'</span>,
+        baseXY: [<span class="number">0</span>, <span class="string">'100%'</span>],
+        selfXY: [<span class="number">0</span>, <span class="number">0</span>]
+    },
+    className: <span class="string">'popup'</span>,
+    template: <span class="string">'&lt;div&gt;位置在本按钮下方&lt;/div&gt;'</span>
+});
+
+
+$(<span class="string">'#example2-1'</span>).click(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+    example2_1.show();
+});
+
+$(<span class="string">'#example2-2'</span>).click(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+    example2_2.show();
+});</code></pre></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Switchable-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Switchable</h1>
+		<p>Switchable 提供了切换的基本操作，并通过参数配置实现了自动播放，循环，切换等操作，并提供不同的特点封装成了 Slide, Carousel 模块。用户可以根据自己的需求引用不同的模块。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<p>Switchable 继承了 <a href="../widget/widget.html">Widget</a>，可使用其中包括 <a href="../base/base.html">Base</a>、<a href="../class/class.html">Class</a>、<a href="../events/events.html">Events</a>、<a href="../base/attrs.html">Attrs</a>、<a href="../base/aspect.html">Aspect</a> 的属性和方法。</p>
+<h1 id="配置说明">配置说明<a href="#配置说明" class="anchor">¶</a></h1><h2 id="triggers-element-string-array">triggers <code>element|String|Array</code><a href="#triggers-element-string-array" class="anchor">¶</a></h2><p>触发器列表, 支持直接传入选择器，也可以是元素数组。</p>
+<h2 id="panels-element-string-array">panels <code>element|String|Array</code><a href="#panels-element-string-array" class="anchor">¶</a></h2><p>面板列表，支持直接传入选择器，也可以是元素数组。</p>
+<p><strong>注意: 如果页面上有多个 Switchable 组件, triggers 和 panels 的 selector 最好写的更加精确些, 比如 <code>triggers: &#39;#banner .ui-switchable-nav li&#39;</code>,
+而不是 <code>triggers: &#39;.ui-switchable-nav li&#39;</code>, 这样能避免多个组件引用 triggers/panels 的冲突.</strong></p>
+<h2 id="classprefix-string">classPrefix <code>String</code><a href="#classprefix-string" class="anchor">¶</a></h2><p>样式前缀。</p>
+<h2 id="hastriggers-boolean">hasTriggers <code>boolean</code><a href="#hastriggers-boolean" class="anchor">¶</a></h2><p>是否包含 triggers，用于没有传入 triggers 时，是否自动生成的判断标准。</p>
+<h2 id="autohidetriggers-boolean">autoHideTriggers <code>boolean</code><a href="#autohidetriggers-boolean" class="anchor">¶</a></h2><p>在只有一个 trigger 时是否自动隐藏。</p>
+<h2 id="triggertype-string">triggerType <code>String</code><a href="#triggertype-string" class="anchor">¶</a></h2><p>触发类型，默认<code>hover</code>.还可以选择<code>click</code></p>
+<h2 id="delay-number">delay <code>Number</code><a href="#delay-number" class="anchor">¶</a></h2><p>默认为<code>100</code>， 触发器延迟时间，单位为毫秒。</p>
+<h2 id="activetriggerclass-string">activeTriggerClass <code>String</code><a href="#activetriggerclass-string" class="anchor">¶</a></h2><p>触发器被选中时的class,默认<code>ui-switchable-active</code>。</p>
+<h2 id="activeindex-number">activeIndex <code>Number</code><a href="#activeindex-number" class="anchor">¶</a></h2><p>初始化时，自动切换到指定面板，默认为<code>0</code>，也就是第一个。</p>
+<h2 id="step-number">step <code>Number</code><a href="#step-number" class="anchor">¶</a></h2><p>步长，表示每次切换时需要间隔多少个panels, 默认为<code>1</code>。</p>
+<h2 id="size-number">size <code>Number</code><a href="#size-number" class="anchor">¶</a></h2><p>可视窗口有多少个显示面板, 默认为<code>1</code>。</p>
+<h2 id="viewsize-array">viewSize <code>Array</code><a href="#viewsize-array" class="anchor">¶</a></h2><p>可见视图区域的大小. 如果 css 中不设置 panel 的高宽或初始没有 panel , 则需要这里手工指定大小, 默认为 [].</p>
+<p><code>当 panel 的高宽 css 中不指定时，需要设置 viewSize 为单个 panel 的高宽.</code></p>
+<h2 id="autoplay-boolean">autoplay <code>Boolean</code><a href="#autoplay-boolean" class="anchor">¶</a></h2><p>是否自动切换，默认为<code>false</code>, 开启后，不需要触发触发器，可以实现自动播放。</p>
+<h2 id="interval-number">interval <code>Number</code><a href="#interval-number" class="anchor">¶</a></h2><p>自动播放间隔时间, 以毫秒为单位, 默认为 <code>5000</code>。</p>
+<h2 id="circular-boolean">circular <code>Boolean</code><a href="#circular-boolean" class="anchor">¶</a></h2><p>是否循环切换, 默认为 <code>true</code>, 是否循环播放, 当切换到最初/最后一个时, 是否切换到最后/最初一个。</p>
+<h2 id="effect-string">effect <code>String</code><a href="#effect-string" class="anchor">¶</a></h2><p>动画效果函数, 默认没有特效, 可取 <code>scrollx</code>, <code>scrolly</code>, <code>fade</code>.</p>
+<h2 id="duration-number">duration <code>Number</code><a href="#duration-number" class="anchor">¶</a></h2><p>默认为 <code>500</code>, 以毫秒为单位， 动画的时长.</p>
+<h2 id="easing-string-function">easing <code>String|Function</code><a href="#easing-string-function" class="anchor">¶</a></h2><p>动画效果，目前支持,<code>easeNode</code>默认, <code>easeIn</code>, <code>easeOut</code>, <code>easeBoth</code>, <code>easeInStrong</code>, <code>easeOutStrong</code>, <code>easeBothStrong</code>, <code>elasticIn</code>, <code>elasticOut</code>, <code>elasticBoth</code>, <code>backIn</code>, <code>backOut</code>, <code>backBoth</code>, <code>bounceIn</code>, <code>bounceOut</code>, <code>bounceBoth</code>。</p>
+<h1 id="data-api-配置属性">DATA API 配置属性<a href="#data-api-配置属性" class="anchor">¶</a></h1><p>目前项目支持data-api的形式配置相关属性，并以role的形式配置到项目中，主要有下面6个role.
+前面4个是所有组件均有效，后面2个，只在 Carousel 组件中生效.</p>
+<ul>
+<li><p><code>panel</code> 单个面板</p>
+</li>
+<li><p><code>content</code> 面板列表元素</p>
+</li>
+<li><p><code>trigger</code> 触发器</p>
+</li>
+<li><p><code>nav</code> 触发器容器</p>
+</li>
+<li><p><code>prev</code> 上一页 (仅在Carousel组件生效)</p>
+</li>
+<li><p><code>next</code> 下一页 (仅在Carousle组件中生效)</p>
+</li>
+</ul>
+<div class="highlight"><pre><code class="xml"><span class="comment">&lt;!-- 容器元素 --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"J_Slide"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">span</span> <span class="attribute">data-role</span>=<span class="value">"prev"</span>&gt;</span>上一页<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"ui-switchable-nav"</span> <span class="attribute">data-role</span>=<span class="value">"nav"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">data-role</span>=<span class="value">"trigger"</span>&gt;</span>标题 A<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">data-role</span>=<span class="value">"trigger"</span>&gt;</span>标题 B<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">data-role</span>=<span class="value">"trigger"</span>&gt;</span>标题 C<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">data-role</span>=<span class="value">"trigger"</span>&gt;</span>标题 D<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">data-role</span>=<span class="value">"trigger"</span>&gt;</span>标题 E<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"ui-switchable-content"</span> <span class="attribute">data-role</span>=<span class="value">"content"</span>&gt;</span>  <span class="comment">&lt;!-- 面板列表 --&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"panel"</span>&gt;</span>内容 A<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"display: none"</span> <span class="attribute">data-role</span>=<span class="value">"panel"</span>&gt;</span>内容 B<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"display: none"</span> <span class="attribute">data-role</span>=<span class="value">"panel"</span>&gt;</span>内容 C<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"display: none"</span> <span class="attribute">data-role</span>=<span class="value">"panel"</span>&gt;</span>内容 D<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">span</span> <span class="attribute">data-role</span>=<span class="value">"next"</span>&gt;</span>下一页<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre></div><ul>
+<li><p><code>prev</code> 上一页 (仅在 Carousel 组件生效)</p>
+</li>
+<li><p><code>next</code> 下一页 (仅在 Carousle 组件中生效)</p>
+</li>
+</ul>
+<h1 id="方法说明">方法说明<a href="#方法说明" class="anchor">¶</a></h1><h2 id="switchto-toindex">switchTo(toIndex)<a href="#switchto-toindex" class="anchor">¶</a></h2><p>切换到指定 index。</p>
+<h2 id="prev">prev()<a href="#prev" class="anchor">¶</a></h2><p>切换到上一视图。</p>
+<h2 id="next">next()<a href="#next" class="anchor">¶</a></h2><p>切换到下一视图。</p>
+<h2 id="start">start()<a href="#start" class="anchor">¶</a></h2><p>开始自动轮播。</p>
+<h2 id="stop">stop()<a href="#stop" class="anchor">¶</a></h2><p>停止自动轮播。</p>
+<h1 id="事件">事件<a href="#事件" class="anchor">¶</a></h1><p>在组件运行中，会触发相关事件，使用者可以根据自己的需要去监听对应的事件。</p>
+<h2 id="switch">switch<a href="#switch" class="anchor">¶</a></h2><p>面板切换前触发。</p>
+<div class="highlight"><pre><code class="javascript">instance.on(<span class="string">'switch'</span>, <span class="function"><span class="keyword">function</span><span class="params">(toIndex, fromIndex)</span> {</span>
+});</code></pre></div><h2 id="switched">switched<a href="#switched" class="anchor">¶</a></h2><p>面板切换后触发。</p>
+<div class="highlight"><pre><code class="javascript">instance.on(<span class="string">'switched'</span>, <span class="function"><span class="keyword">function</span><span class="params">(toIndex, fromIndex)</span> {</span>
+});</code></pre></div><h2 id="change-activeindex">change:activeIndex<a href="#change-activeindex" class="anchor">¶</a></h2><p>面板改变时触发。</p>
+<div class="highlight"><pre><code class="javascript">instance.on(<span class="string">'change:activeIndex'</span>, <span class="function"><span class="keyword">function</span><span class="params">(toIndex, fromIndex)</span> {</span>
+});</code></pre></div><h1 id="data-role-形式示例">data-role 形式示例<a href="#data-role-形式示例" class="anchor">¶</a></h1><h2 id="css">CSS<a href="#css" class="anchor">¶</a></h2><style type="text/css">#slide-demo-1 {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+#slide-demo-1 .ui-switchable-content {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#slide-demo-1 .ui-switchable-content .ui-switchable-panel {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+#slide-demo-1 .ui-switchable-content .ui-switchable-panel a{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    -webkit-transform: scale(1.6);    /* for Chrome || Safari */
+    -moz-transform: scale(1.6);       /* for Firefox */
+    -ms-transform: scale(1.6);        /* for IE */
+    -o-transform: scale(1.6);         /* for Opera */
+    line-height: 200px;
+    font-size: 60px;
+    background: gray;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+}
+
+#slide-demo-1 .ui-switchable-content .s-zoom a{
+    -webkit-transition: -webkit-transform 4s linear;
+    -moz-transition: -moz-transform 4s linear;
+    -o-transition: -o-transform 4s linear;
+    transition: transform 4s linear;
+    -webkit-transform: scale(1);    /* for Chrome || Safari */
+    -moz-transform: scale(1);       /* for Firefox */
+    -ms-transform: scale(1);        /* for IE */
+    -o-transform: scale(1);         /* for Opera */
+}
+#slide-demo-1 .ui-switchable-nav {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    margin: 0;
+    padding: 0;
+    z-index: 99;
+    font-size: 12px;
+}
+#slide-demo-1 .ui-switchable-nav .ui-switchable-trigger {
+    float: left;
+    width: 15px;
+    height: 15px;
+    line-height: 17px;
+    margin-left: 5px;
+    background-color: #FFF;
+    opacity: .5;
+    filter: alpha(opacity=50);
+    text-align: center;
+    color: black;
+    cursor: pointer;
+    list-style: none;
+}
+#slide-demo-1 .ui-switchable-nav .ui-switchable-active {
+    color: #FFF;
+    background-color: #e96c3e;
+    opacity: 1;
+    filter: alpha(opacity=100);
+}</style><div class="highlight"><pre><code class="css"><span class="id">#slide-demo-1</span> <span class="rules">{
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;
+    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">100</span>%</span></span>;
+    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">200</span>px</span></span>;
+    <span class="rule"><span class="attribute">overflow</span>:<span class="value"> hidden</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#slide-demo-1</span> <span class="class">.ui-switchable-content</span> <span class="rules">{
+    <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">0</span></span></span>;
+    <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">0</span></span></span>;
+    <span class="rule"><span class="attribute">list-style</span>:<span class="value"> none</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#slide-demo-1</span> <span class="class">.ui-switchable-content</span> <span class="class">.ui-switchable-panel</span> <span class="rules">{
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;
+    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">100</span>%</span></span>;
+    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">200</span>px</span></span>;
+    <span class="rule"><span class="attribute">overflow</span>:<span class="value"> hidden</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#slide-demo-1</span> <span class="class">.ui-switchable-content</span> <span class="class">.ui-switchable-panel</span> <span class="tag">a</span><span class="rules">{
+    <span class="rule"><span class="attribute">width</span>:<span class="value"><span class="number">100</span>%</span></span>;
+    <span class="rule"><span class="attribute">height</span>:<span class="value"><span class="number">100</span>%</span></span>;
+    <span class="rule"><span class="attribute">overflow</span>:<span class="value">hidden</span></span>;
+    <span class="rule"><span class="attribute">-webkit-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1.6</span>)</span></span></span>;    <span class="comment">/* for Chrome || Safari */</span>
+    <span class="rule"><span class="attribute">-moz-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1.6</span>)</span></span></span>;       <span class="comment">/* for Firefox */</span>
+    <span class="rule"><span class="attribute">-ms-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1.6</span>)</span></span></span>;        <span class="comment">/* for IE */</span>
+    <span class="rule"><span class="attribute">-o-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1.6</span>)</span></span></span>;         <span class="comment">/* for Opera */</span>
+    <span class="rule"><span class="attribute">line-height</span>:<span class="value"> <span class="number">200</span>px</span></span>;
+    <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">60</span>px</span></span>;
+    <span class="rule"><span class="attribute">background</span>:<span class="value"> gray</span></span>;
+    <span class="rule"><span class="attribute">color</span>:<span class="value"> <span class="hexcolor">#fff</span></span></span>;
+    <span class="rule"><span class="attribute">font-weight</span>:<span class="value"> bold</span></span>;
+    <span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>;
+    <span class="rule"><span class="attribute">text-align</span>:<span class="value"> center</span></span>;
+<span class="rule">}</span></span>
+
+<span class="id">#slide-demo-1</span> <span class="class">.ui-switchable-content</span> <span class="class">.s-zoom</span> <span class="tag">a</span><span class="rules">{
+    <span class="rule"><span class="attribute">-webkit-transition</span>:<span class="value"> -webkit-transform <span class="number">4</span>s linear</span></span>;
+    <span class="rule"><span class="attribute">-moz-transition</span>:<span class="value"> -moz-transform <span class="number">4</span>s linear</span></span>;
+    <span class="rule"><span class="attribute">-o-transition</span>:<span class="value"> -o-transform <span class="number">4</span>s linear</span></span>;
+    <span class="rule"><span class="attribute">transition</span>:<span class="value"> transform <span class="number">4</span>s linear</span></span>;
+    <span class="rule"><span class="attribute">-webkit-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1</span>)</span></span></span>;    <span class="comment">/* for Chrome || Safari */</span>
+    <span class="rule"><span class="attribute">-moz-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1</span>)</span></span></span>;       <span class="comment">/* for Firefox */</span>
+    <span class="rule"><span class="attribute">-ms-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1</span>)</span></span></span>;        <span class="comment">/* for IE */</span>
+    <span class="rule"><span class="attribute">-o-transform</span>:<span class="value"> <span class="function">scale(<span class="number">1</span>)</span></span></span>;         <span class="comment">/* for Opera */</span>
+<span class="rule">}</span></span>
+<span class="id">#slide-demo-1</span> <span class="class">.ui-switchable-nav</span> <span class="rules">{
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;
+    <span class="rule"><span class="attribute">bottom</span>:<span class="value"> <span class="number">10</span>px</span></span>;
+    <span class="rule"><span class="attribute">right</span>:<span class="value"> <span class="number">10</span>px</span></span>;
+    <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">0</span></span></span>;
+    <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">0</span></span></span>;
+    <span class="rule"><span class="attribute">z-index</span>:<span class="value"> <span class="number">99</span></span></span>;
+    <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">12</span>px</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#slide-demo-1</span> <span class="class">.ui-switchable-nav</span> <span class="class">.ui-switchable-trigger</span> <span class="rules">{
+    <span class="rule"><span class="attribute">float</span>:<span class="value"> left</span></span>;
+    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">15</span>px</span></span>;
+    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">15</span>px</span></span>;
+    <span class="rule"><span class="attribute">line-height</span>:<span class="value"> <span class="number">17</span>px</span></span>;
+    <span class="rule"><span class="attribute">margin-left</span>:<span class="value"> <span class="number">5</span>px</span></span>;
+    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#FFF</span></span></span>;
+    <span class="rule"><span class="attribute">opacity</span>:<span class="value"> .<span class="number">5</span></span></span>;
+    <span class="rule"><span class="attribute">filter</span>:<span class="value"> <span class="function">alpha(opacity=<span class="number">50</span>)</span></span></span>;
+    <span class="rule"><span class="attribute">text-align</span>:<span class="value"> center</span></span>;
+    <span class="rule"><span class="attribute">color</span>:<span class="value"> black</span></span>;
+    <span class="rule"><span class="attribute">cursor</span>:<span class="value"> pointer</span></span>;
+    <span class="rule"><span class="attribute">list-style</span>:<span class="value"> none</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#slide-demo-1</span> <span class="class">.ui-switchable-nav</span> <span class="class">.ui-switchable-active</span> <span class="rules">{
+    <span class="rule"><span class="attribute">color</span>:<span class="value"> <span class="hexcolor">#FFF</span></span></span>;
+    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#e96c3e</span></span></span>;
+    <span class="rule"><span class="attribute">opacity</span>:<span class="value"> <span class="number">1</span></span></span>;
+    <span class="rule"><span class="attribute">filter</span>:<span class="value"> <span class="function">alpha(opacity=<span class="number">100</span>)</span></span></span>;
+<span class="rule">}</span></span></code></pre></div><h2 id="html">HTML<a href="#html" class="anchor">¶</a></h2><div class="nico-insert-code"><div id="slide-demo-1" class="slide-demo">
+    <ul class="ui-switchable-content" data-role="content">
+        <li class="ui-switchable-panel"><a href="javascript:;">01</a></li>
+        <li class="ui-switchable-panel"><a href="javascript:;">02</a></li>
+        <li class="ui-switchable-panel"><a href="javascript:;">03</a></li>
+    </ul>
+</div></div><div class="highlight"><pre><code class="xml"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"slide-demo-1"</span> <span class="attribute">class</span>=<span class="value">"slide-demo"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"ui-switchable-content"</span> <span class="attribute">data-role</span>=<span class="value">"content"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"ui-switchable-panel"</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"javascript:;"</span>&gt;</span>01<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"ui-switchable-panel"</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"javascript:;"</span>&gt;</span>02<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">li</span> <span class="attribute">class</span>=<span class="value">"ui-switchable-panel"</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"javascript:;"</span>&gt;</span>03<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span></code></pre></div><script>
+var Switchable = FNX.include('switchable/switchable');
+
+var mainSlide = new Switchable({
+    interval: 5000,
+    element: '#slide-demo-1',
+    effect:'fade',
+    autoplay: true,
+    onSwitched: function (nextIndex, prevIndex) {
+        var panels = this.get('panels');
+
+        if (prevIndex != null) {
+            $(panels.get(prevIndex)).removeClass('s-zoom');
+        }
+
+        $(panels.get(nextIndex)).addClass('s-zoom');
+    }
+});
+
+mainSlide.render();</script><div class="highlight"><pre><code class="javascript">
+<span class="keyword">var</span> Switchable = FNX.include(<span class="string">'switchable/switchable'</span>);
+
+<span class="keyword">var</span> mainSlide = <span class="keyword">new</span> Switchable({
+    interval: <span class="number">5000</span>,
+    element: <span class="string">'#slide-demo-1'</span>,
+    effect:<span class="string">'fade'</span>,
+    autoplay: <span class="literal">true</span>,
+    onSwitched: <span class="function"><span class="keyword">function</span> <span class="params">(nextIndex, prevIndex)</span> {</span>
+        <span class="keyword">var</span> panels = <span class="keyword">this</span>.get(<span class="string">'panels'</span>);
+
+        <span class="keyword">if</span> (prevIndex != <span class="literal">null</span>) {
+            $(panels.get(prevIndex)).removeClass(<span class="string">'s-zoom'</span>);
+        }
+
+        $(panels.get(nextIndex)).addClass(<span class="string">'s-zoom'</span>);
+    }
+});
+
+mainSlide.render();</code></pre></div><h1 id="示例">示例<a href="#示例" class="anchor">¶</a></h1><ul>
+<li><a href="examples/carousel.html">carousel 旋转木马</a></li>
+</ul>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

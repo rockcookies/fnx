@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Dialog-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Dialog</h1>
+		<p>基础对话框组件，提供对话框显示隐藏、dom 结构自定义、定位、确定取消关闭等功能特性。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<p>Dialog 继承了 <a href="../popup/popup.html">Popup</a>，可使用其中属性和方法。</p>
+<h1 id="配置说明">配置说明<a href="#配置说明" class="anchor">¶</a></h1><h2 id="title-string">title <code>string</code><a href="#title-string" class="anchor">¶</a></h2><p>对话框标题。</p>
+<h2 id="button-array">button <code>array</code><a href="#button-array" class="anchor">¶</a></h2><p>按钮组，格式：</p>
+<div class="highlight"><pre><code class="javascript">[{
+    role : <span class="string">'confirm'</span>,
+    cls : <span class="string">'ui-dialog-button-orange'</span>,
+    text : <span class="string">'确定'</span>,
+    autofocus: <span class="literal">true</span>
+}, {
+    role : <span class="string">'cancel'</span>,
+    cls : <span class="string">'ui-dialog-button-white'</span>,
+    text : <span class="string">'取消'</span>
+}]</code></pre></div><h2 id="classprefix-string">classPrefix <code>string</code><a href="#classprefix-string" class="anchor">¶</a></h2><p>统一样式前缀。</p>
+<h2 id="skin-string">skin <code>string</code><a href="#skin-string" class="anchor">¶</a></h2><p>对话框主题。</p>
+<h2 id="content-element-string">content <code>element|string</code><a href="#content-element-string" class="anchor">¶</a></h2><p>指定内容元素，可以是 iframe 地址，默认为 element。</p>
+<ul>
+<li>指定为 iframe：<code>iframe:http://www.baidu.com</code></li>
+<li>指定为 ajax：<code>ajax:http://www.xxxx.com/partial.html</code></li>
+</ul>
+<h2 id="closetpl-string">closeTpl <code>string</code><a href="#closetpl-string" class="anchor">¶</a></h2><p>关闭按钮可以自定义。</p>
+<h2 id="initialheight-number">initialHeight <code>number</code><a href="#initialheight-number" class="anchor">¶</a></h2><p>iframe,ajax 类型时，dialog 的最初高度。</p>
+<h2 id="initialwidth-number">initialWidth <code>number</code><a href="#initialwidth-number" class="anchor">¶</a></h2><p>iframe,ajax 类型时，dialog 的最初宽度。</p>
+<h2 id="autofit-boolean">autoFit <code>boolean</code><a href="#autofit-boolean" class="anchor">¶</a></h2><p>iframe 类型时是否自适应。</p>
+<h1 id="静态方法">静态方法<a href="#静态方法" class="anchor">¶</a></h1><h2 id="alert">alert<a href="#alert" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Dialog = FNX.include(<span class="string">'popup/dialog'</span>);
+
+Dialog.alert(<span class="string">'信息标题'</span>, <span class="string">'信息内容'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+    console.log(<span class="string">'callback'</span>)
+});</code></pre></div><h2 id="confirm">confirm<a href="#confirm" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Dialog = FNX.include(<span class="string">'popup/dialog'</span>);
+
+Dialog.confirm(<span class="string">'信息标题'</span>, <span class="string">'信息内容'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(flag)</span> {</span>
+    console.log(flag)
+});</code></pre></div><h2 id="show">show<a href="#show" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Dialog = FNX.include(<span class="string">'popup/dialog'</span>);
+
+Dialog.show(<span class="string">'信息内容'</span>);</code></pre></div><h1 id="示例">示例<a href="#示例" class="anchor">¶</a></h1><ul>
+<li><a href="examples/dialog-basic.html">基本示例</a></li>
+<li><a href="examples/dialog-custom.html">各属性的使用</a></li>
+<li><a href="examples/dialog-static.html">ConfirmBox</a></li>
+</ul>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

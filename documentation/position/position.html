@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Position-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Position</h1>
+		<p>简单实用的定位工具，将一个 DOM 节点相对于另一个 DOM 节点进行定位操作。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<h1 id="定位原理">定位原理<a href="#定位原理" class="anchor">¶</a></h1><p><code>Position</code> 组件的定位原理是，通过两个对象分别描述定位元素及其定位点，然后将其定位点重合。</p>
+<p>比如有基准元素 A  和 目标元素 B ，先设定 A 的定位点为左上角，B 的定位点为中央。
+则分别描述为 <code>{ element: A, x: 0, y: 0 }</code> 和 <code>{ element: B, x: &#39;50%&#39;, y: &#39;50%&#39; }</code>，然后将 B 的中央定位到 A 的左上角，就完成了定位。</p>
+<p>定位原理如下图，x 代表横轴，y 代表纵轴。</p>
+<p><img src="images\position.png" alt="定位原理"></p>
+<h1 id="使用说明">使用说明<a href="#使用说明" class="anchor">¶</a></h1><h2 id="pin-position-pin-pinobject-baseobject">pin <code>Position.pin(pinObject, [baseObject])</code><a href="#pin-position-pin-pinobject-baseobject" class="anchor">¶</a></h2><p>基础定位方法，接收两个参数。</p>
+<ol>
+<li><p><code>pinObject</code>：目标定位元素，必选。</p>
+<p>类型为字面量对象 <code>{ element: a, x: 10, y: 10 }</code>，element 为需定位元素， x 和 y 表示定位元素的定位点。</p>
+<p>也可简单写成 DOM 节点 a，相当于 <code>{ element: a, x: 0, y: 0 }</code>，表示定位点是节点左上角。</p>
+</li>
+<li><p><code>baseObject</code>：基准定位元素，可选。</p>
+<p>类型为字面量对象 <code>{ element: b, x: 10, y: 10 }</code>，element 为基准定位元素，x 和 y 表示基准定位元素的定位点。</p>
+<p>也可简单写成 DOM 节点 a，相当于 <code>{ element: a, x: 0, y: 0 }</code>，表示定位点是节点左上角。</p>
+<p>当 element 缺省时，表示 pinObject 相对屏幕可见区域的左上角定位。比如可以写成</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin(a, { x: <span class="number">10</span>, y: <span class="number">10</span> });    <span class="comment">// 这样后一个参数可简单理解为偏移量</span></code></pre></div><p>或写成</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin({ element: a, x: -<span class="number">10</span>, y: -<span class="number">10</span> });</code></pre></div></li>
+</ol>
+<h2 id="center-position-center-pinelement-baseelement">center <code>Position.center(pinElement, [baseElement])</code><a href="#center-position-center-pinelement-baseelement" class="anchor">¶</a></h2><p>居中定位，接收两个参数，将 pinElement 定位在 baseElement 元素的中央位置。</p>
+<ol>
+<li><p><code>pinElement</code>：定位节点，必选。</p>
+</li>
+<li><p><code>baseElement</code>：基准定位节点，可选。缺省时表示将 pinElement 定位在屏幕中央。</p>
+</li>
+</ol>
+<h2 id="viewport-position-viewport">VIEWPORT <code>Position.VIEWPORT</code><a href="#viewport-position-viewport" class="anchor">¶</a></h2><p>当前可视区域的伪元素，当需要相对于当前可视区域定位时，上述参数的 element 可传入 Position.VIEWPORT。</p>
+<p>比如相对于屏幕中央定位：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin(
+    { element: a, x: <span class="string">'center'</span>, y: <span class="string">'center'</span> },
+    { element: Position.VIEWPORT, x: <span class="string">'center'</span>, y: <span class="string">'center'</span> }
+);</code></pre></div><p>或写成</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.center(a, Position.VIEWPORT);</code></pre></div><h1 id="最佳实践">最佳实践<a href="#最佳实践" class="anchor">¶</a></h1><h2 id="1-定位元素到可视区域左上角">1. 定位元素到可视区域左上角<a href="#1-定位元素到可视区域左上角" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin(a, { x: <span class="number">0</span>, y: <span class="number">0</span> });    <span class="comment">// 后一个参数可理解为偏移量</span></code></pre></div><h2 id="2-定位元素到基准元素位置向右偏移-20px">2. 定位元素到基准元素位置向右偏移 20px<a href="#2-定位元素到基准元素位置向右偏移-20px" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin(a, { element: b, x: <span class="string">'20px'</span>, y: <span class="number">0</span> });</code></pre></div><h2 id="3-定位元素到基准元素下方-20px-的位置">3. 定位元素到基准元素下方 20px 的位置<a href="#3-定位元素到基准元素下方-20px-的位置" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin(a, { element: b, x: <span class="number">0</span>, y: <span class="string">'100%+20px'</span> });</code></pre></div><h2 id="4-定位元素到基准元素正中央">4. 定位元素到基准元素正中央<a href="#4-定位元素到基准元素正中央" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.center(a, b);</code></pre></div><h2 id="5-定位元素到基准元素右方中间位置">5. 定位元素到基准元素右方中间位置<a href="#5-定位元素到基准元素右方中间位置" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin(a, { element: b, x: <span class="string">'right'</span>, y: <span class="string">'center'</span> });</code></pre></div><p>或者</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.pin(a, { element: b, x: <span class="string">'100%'</span>, y: <span class="string">'50%'</span> });</code></pre></div><h2 id="6-定位元素到可视区域中央">6. 定位元素到可视区域中央<a href="#6-定位元素到可视区域中央" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Position = FNX.include(<span class="string">'position/position'</span>);
+
+Position.center(a);</code></pre></div><h1 id="注意事项">注意事项<a href="#注意事项" class="anchor">¶</a></h1><ul>
+<li><strong> IE8 下，当文档流中定位元素在基准元素的相邻前方，并且不是body的第一个元素时，基准元素有可能会因为未 reflow 而导致 margin-top 失效，所以要尽量避免定位元素与基准元素相邻并在其之前<a href="examples\fuckie8.html">（IE8 下的诡异bug）</a>。</strong></li>
+</ul>
+<h2 id="示例">示例<a href="#示例" class="anchor">¶</a></h2><ul>
+<li><a href="examples\basic.html">各类定位演示</a></li>
+<li><a href="examples\fuckie8.html">IE8 下的诡异bug</a></li>
+</ul>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

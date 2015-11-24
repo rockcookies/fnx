@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Overlay-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../../static/css/site.css" />
+ <link rel="stylesheet" href="../../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../../" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../../">首页</a></li>
+				<li><a href="../../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Overlay</h1>
+		<p>Overlay 基本示例。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<style>
+.parent{
+    position:relative;
+    float:right;
+}
+.example {
+    color: #fff;
+    background-color: #89c237;
+    display:inline-block;
+    z-index: 99999;
+}
+</style>
+
+
+<h1 id="1-基本浮层">1. 基本浮层<a href="#1-基本浮层" class="anchor">¶</a></h1><p>目标元素1定位在基准元素1的右边，高宽分别为30/100，底色红色。</p>
+<div id="c"></div>
+<div id="a" class="example">基准元素1</div>
+
+
+<script>var Overlay = FNX.include('overlay/overlay');
+
+var o = new Overlay({
+    template: "<div class='overlay'>目标元素1</div>",
+    parentNode: '#c',
+    id: 'myoverlay',
+    style: {
+        color: '#fff'
+    },
+    align: {
+        selfXY: ['-100%', 0],
+        baseElement: '#a',
+        baseXY: [0, 0]
+    }
+});
+o.show();
+o.set('style', {
+    backgroundColor: '#f53379'
+});
+o.set('height', 40);</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Overlay = FNX.include(<span class="string">'overlay/overlay'</span>);
+
+<span class="keyword">var</span> o = <span class="keyword">new</span> Overlay({
+    template: <span class="string">"&lt;div class='overlay'&gt;目标元素1&lt;/div&gt;"</span>,
+    parentNode: <span class="string">'#c'</span>,
+    id: <span class="string">'myoverlay'</span>,
+    style: {
+        color: <span class="string">'#fff'</span>
+    },
+    align: {
+        selfXY: [<span class="string">'-100%'</span>, <span class="number">0</span>],
+        baseElement: <span class="string">'#a'</span>,
+        baseXY: [<span class="number">0</span>, <span class="number">0</span>]
+    }
+});
+o.show();
+o.set(<span class="string">'style'</span>, {
+    backgroundColor: <span class="string">'#f53379'</span>
+});
+o.set(<span class="string">'height'</span>, <span class="number">40</span>);</code></pre></div><h1 id="2-全局定位浮层">2. 全局定位浮层<a href="#2-全局定位浮层" class="anchor">¶</a></h1><p>目标元素2，宽80高30，位置为可视区域top:0 left:200。</p>
+<div id="b" class="example">目标元素2</div>
+
+<script>var Overlay = FNX.include('overlay/overlay');
+
+var o2 = new Overlay({
+    element: '#b',
+    width: 100,
+    align: {
+        baseXY: [200, 0]
+    }
+});
+o2.show();</script><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Overlay = FNX.include(<span class="string">'overlay/overlay'</span>);
+
+<span class="keyword">var</span> o2 = <span class="keyword">new</span> Overlay({
+    element: <span class="string">'#b'</span>,
+    width: <span class="number">100</span>,
+    align: {
+        baseXY: [<span class="number">200</span>, <span class="number">0</span>]
+    }
+});
+o2.show();</code></pre></div><h1 id="3-窗口大小变化时重新定位（被动特性）">3. 窗口大小变化时重新定位（被动特性）<a href="#3-窗口大小变化时重新定位（被动特性）" class="anchor">¶</a></h1><p>请改变本窗口的大小并观察一下目标元素1、2的位置。</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../../static/js/site.js"></script>
+
+
+</body>
+
+</html>
