@@ -1,7 +1,6 @@
 var $ = require("$"),
   Overlay = require("overlay/overlay"),
   win = $(window),
-  doc = $(document),
 
 ua = (window.navigator.userAgent || "").toLowerCase(),
 isIE6 = ua.indexOf("msie 6") !== -1;
@@ -52,5 +51,7 @@ var Mask = Overlay.extend({
   }
 });
 
-// 单例
+
 module.exports = Mask;
+
+require('class/class-loader').register('overlay/mask', module.exports);

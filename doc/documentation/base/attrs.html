@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Attrs 使用文档-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../readme.html" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../readme.html">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Attrs 使用文档</h1>
+		<p>提供基本的属性添加、获取、移除等功能。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<h1 id="使用说明">使用说明<a href="#使用说明" class="anchor">¶</a></h1><p>基于 <code>Base.extend</code> 创建的类，会自动添加上 <code>Attrs</code> 提供的功能。例子：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Base = FNX.include(<span class="string">'base/base'</span>);
+
+<span class="keyword">var</span> Panel = Base.extend({
+    attrs: {
+        element: {
+            value: <span class="string">'#test'</span>,
+            readOnly: <span class="literal">true</span>
+        },
+        color: <span class="string">'#fff'</span>,
+        size: {
+            width: <span class="number">100</span>,
+            height: <span class="number">100</span>
+        },
+        x: <span class="number">200</span>,
+        y: <span class="number">200</span>,
+        xy: {
+            getter: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+                <span class="keyword">return</span> <span class="keyword">this</span>.get(<span class="string">'x'</span>) + <span class="keyword">this</span>.get(<span class="string">'y'</span>);
+            },
+            setter: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+                <span class="keyword">this</span>.set(<span class="string">'x'</span>, val[<span class="number">0</span>]);
+                <span class="keyword">this</span>.set(<span class="string">'y'</span>, val[<span class="number">1</span>]);
+            }
+        }
+    },
+
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">(config)</span> {</span>
+        Panel.superclass.initialize.call(<span class="keyword">this</span>, config);
+        <span class="keyword">this</span>.element = $(config.element).eq(<span class="number">0</span>);
+    },
+
+    _onChangeColor: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+        <span class="keyword">this</span>.element.css(<span class="string">'backgroundColor'</span>, val);
+    }
+});</code></pre></div><p><strong>在 <code>initialize</code> 方法中，调用 <code>superclass.initialize</code> 方法，就可以自动设置好实例的属性。</strong></p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> panel = <span class="keyword">new</span> Panel({
+    element: <span class="string">'#test'</span>,
+    color: <span class="string">'#f00'</span>,
+    size: {
+        width: <span class="number">200</span>
+    }
+});
+
+console.log(panel.get(<span class="string">'color'</span>)); <span class="comment">// '#f00'</span>
+console.log(panel.get(<span class="string">'size'</span>)); <span class="comment">// { width: 200, height: 100 }</span></code></pre></div><p>在初始化时，实例中的 <code>_onChangeX</code> 方法会自动注册到 <code>change:x</code> 事件的回调队列中：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> panel = <span class="keyword">new</span> Panel({ element: <span class="string">'#test'</span> });
+panel.set(<span class="string">'color'</span>, <span class="string">'#00f'</span>); <span class="comment">// this.element 的背景色自动变为 '#00f'</span></code></pre></div><p>虽然在组件实例化的时候也会设置属性，但不会触发 <code>change:x</code> 事件，即不会执行 <code>_onChangeX</code>。</p>
+<h1 id="api">API<a href="#api" class="anchor">¶</a></h1><h2 id="attrs-的设置">attrs 的设置<a href="#attrs-的设置" class="anchor">¶</a></h2><p>类定义时, 通过设置 attrs 来定义该类有哪些属性, 每个属性是通过如下方式定义的:</p>
+<div class="highlight"><pre><code class="javascript">{
+    <span class="comment">// 方式一: 直接设置默认值</span>
+    attr1: <span class="string">"aString"</span>,
+
+    <span class="comment">// 方式二: 通过对象的 value 设置默认值, 相当于方式一</span>
+    attr2: {
+        value: <span class="string">"bString"</span>
+    },
+
+    <span class="comment">// 方式三: 设置 setter</span>
+    attr3: {
+        value: <span class="string">"cString"</span>,
+        <span class="comment">// setter 会在对象调用 set() 时触发, 可以在此时做些处理,</span>
+        <span class="comment">// 比如强制类型转换</span>
+        <span class="comment">// 即当 obj.set('attr3', 1) 后, 会调用 setter, 转换成 '1'</span>
+        <span class="comment">// setter 的 this 为当前实例对象</span>
+        setter: <span class="function"><span class="keyword">function</span><span class="params">(v)</span> {</span>
+            <span class="keyword">return</span> v + <span class="string">""</span>
+        }
+    },
+
+    <span class="comment">// 方式四: 设置 getter</span>
+    attr4: {
+        value: <span class="number">10</span>,
+        <span class="comment">// getter 会在对象调用 get() 时触发, 同样可以在此时做些处理,</span>
+        <span class="comment">// 比如存的是美元, 转成人民币</span>
+        <span class="comment">// 即当 obj.get('attr4') 后, 会调用 getter</span>
+        <span class="comment">// getter 的 this 为当前实例对象</span>
+        getter: <span class="function"><span class="keyword">function</span><span class="params">(v)</span> {</span>
+            <span class="comment">// 美元 * 汇率 = 人民币</span>
+            <span class="keyword">return</span> v * <span class="number">6.8</span>
+        }
+    },
+
+    <span class="comment">// 方式五: readonly</span>
+    attr5: {
+        value: <span class="number">0</span>,
+        <span class="comment">// 设置 readOnly 之后, 没法通过 obj.set() 的方式设置值, 即不可更改</span>
+        <span class="comment">// 可以同时设置 getter 来调整</span>
+        <span class="comment">// 默认 readOnly 为 false</span>
+        readOnly: <span class="literal">true</span>,
+        getter: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+            <span class="keyword">return</span> Math.ceil(<span class="keyword">this</span>.get(<span class="string">'panels'</span>).length / <span class="keyword">this</span>.get(<span class="string">'step'</span>));
+        }
+    }
+}</code></pre></div><h2 id="set-set-key-value-options">set <code>.set(key, value, options)</code><a href="#set-set-key-value-options" class="anchor">¶</a></h2><p>设置某个值的属性，如果有定义 setter，会先调用 setter。</p>
+<h3 id="options-silent">options.silent<a href="#options-silent" class="anchor">¶</a></h3><p><code>silent=true</code> 时不会触发 change 事件。</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> panel = <span class="keyword">new</span> Panel({ element: <span class="string">'#test'</span> });
+panel.set(<span class="string">'color'</span>, <span class="string">'#00f'</span>, {silent: <span class="literal">true</span>}); <span class="comment">// this.element 的背景色不会改变</span></code></pre></div><h3 id="options-override">options.override<a href="#options-override" class="anchor">¶</a></h3><p>如果属性值为一个简单对象，默认的方式是混合，但 <code>override=true</code> 会覆盖原来的属性。</p>
+<h2 id="get-get-key">get <code>.get(key)</code><a href="#get-get-key" class="anchor">¶</a></h2><p>获取某个属性值，如果有定义 getter，会返回 getter 的返回值。</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

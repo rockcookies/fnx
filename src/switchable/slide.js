@@ -14,3 +14,5 @@ var Slide = Switchable.extend({
 });
 
  module.exports = Slide;
+
+ require('class/class-loader').register('switchable/slide', Slide);

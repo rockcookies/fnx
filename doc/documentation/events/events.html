@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Events-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../readme.html" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../readme.html">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Events</h1>
+		<p>提供基本的事件添加、移除和触发功能。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<h1 id="各框架events实现">各框架Events实现<a href="#各框架events实现" class="anchor">¶</a></h1><ul>
+<li><p>在 DOM 事件的封装上，YUI3 最强大，并带有很强的学术性。jQuery 则非常实用。还有其他一些类库，比如 KISSY、QWrap 等，都大同小异。</p>
+</li>
+<li><p>在 FNX 里，与 DOM 相关的事件，直接采用 jQuery 来实现。</p>
+</li>
+<li><p>该 Events 模块仅提供非常纯粹的事件驱动机制。</p>
+</li>
+<li><p>与该模块定位相同的同类产品有：Backbone.Events, NodeJS 的 EventEmitter 等。</p>
+</li>
+<li><p>NodeJS 的 EventEmitter 功能点较多，主要考虑服务器端。</p>
+</li>
+<li><p>Backbone 的 Events 定位与我们最像，同时也考虑了与 jQuery API 风格的一致性，非常不错。</p>
+</li>
+<li><p>该模块会重点借鉴 Backbone.Events. 在 API 上会有少量调整，以与类库的整体设计风格保持一致。</p>
+</li>
+</ul>
+<h1 id="使用说明">使用说明<a href="#使用说明" class="anchor">¶</a></h1><p>使用 <code>Events</code> 有两种方式，一种是直接实例化：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Events = FNX.include(<span class="string">'events/events'</span>);
+
+<span class="keyword">var</span> object = <span class="keyword">new</span> Events();
+object.on(<span class="string">'expand'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    alert(<span class="string">'expanded'</span>);
+});
+
+object.trigger(<span class="string">'expand'</span>);</code></pre></div><p>另一种是将 <code>Events</code> 混入（mix-in）到其他类中：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Events = FNX.include(<span class="string">'events/events'</span>);
+
+<span class="function"><span class="keyword">function</span> <span class="title">Dog</span><span class="params">()</span> {</span>
+}
+Events.mixTo(Dog);
+
+Dog.prototype.sleep = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="keyword">this</span>.trigger(<span class="string">'sleep'</span>);
+};
+
+<span class="keyword">var</span> dog = <span class="keyword">new</span> Dog();
+dog.on(<span class="string">'sleep'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    alert(<span class="string">'狗狗睡得好香呀'</span>);
+});
+
+dog.sleep();</code></pre></div><p>上面的例子已经展现了 <code>on</code>, <code>trigger</code> <code>mixTo</code> 等方法的基本用法，下面详细阐述所有 API 。</p>
+<h2 id="on-object-on-event-callback-context">on <code>object.on(event, callback, [context])</code><a href="#on-object-on-event-callback-context" class="anchor">¶</a></h2><p>给对象添加事件回调函数。</p>
+<p>可以传入第三个参数 <code>context</code> 来改变回调函数调用时的 <code>this</code> 值：</p>
+<div class="highlight"><pre><code class="javascript">post.on(<span class="string">'saved'</span>, callback, that);</code></pre></div><p><strong>注意</strong>：<code>event</code> 参数有个特殊取值：<code>all</code> 对象上触发任何事件，都会触发 <code>all</code>
+事件的回调函数，传给 <code>all</code> 事件回调函数的第一个参数是事件名。例如，下面的代码可以将一个对象上的所有事件代理到另一个对象上：</p>
+<div class="highlight"><pre><code class="javascript">proxy.on(<span class="string">'all'</span>, <span class="function"><span class="keyword">function</span><span class="params">(eventName)</span> {</span>
+    object.trigger(eventName);
+});</code></pre></div><h2 id="off-object-off-event-callback-context">off <code>object.off([event], [callback], [context])</code><a href="#off-object-off-event-callback-context" class="anchor">¶</a></h2><p>从对象上移除事件回调函数。三个参数都是可选的，当省略某个参数时，表示取该参数的所有值。例子：</p>
+<div class="highlight"><pre><code class="javascript"><span class="comment">// 移除 change 事件上名为 onChange 的回调函数</span>
+object.off(<span class="string">'change'</span>, onChange);
+
+<span class="comment">// 移除 change 事件的所有回调函数</span>
+object.off(<span class="string">'change'</span>);
+
+<span class="comment">// 移除所有事件上名为 onChange 的回调函数</span>
+object.off(<span class="literal">null</span>, onChange);
+
+<span class="comment">// 移除上下文为 context 的所有事件的所有回调函数</span>
+object.off(<span class="literal">null</span>, <span class="literal">null</span>, context);
+
+<span class="comment">// 移除 object 对象上所有事件的所有回调函数</span>
+object.off();</code></pre></div><h2 id="trigger-emit-object-trigger-event-args">trigger/emit <code>object.trigger(event, [*args])</code><a href="#trigger-emit-object-trigger-event-args" class="anchor">¶</a></h2><p>触发一个或多个事件（用空格分隔）。<code>*args</code> 参数会依次传给回调函数。</p>
+<div class="highlight"><pre><code class="javascript">obj.on(<span class="string">'event'</span>, <span class="function"><span class="keyword">function</span><span class="params">(arg1, arg2)</span> {</span>
+  <span class="comment">// your code</span>
+});
+
+obj.trigger(<span class="string">'event'</span>, arg1, arg2);</code></pre></div><p>trigger 的返回值是一个布尔值，会根据所有 callback 的执行情况返回。只要有一个 callback 返回 false，trigger 就会返回 false。</p>
+<div class="highlight"><pre><code class="javascript">obj.on(<span class="string">'event'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="comment">// do sth.</span>
+});
+obj.on(<span class="string">'event'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="comment">// do sth.</span>
+  <span class="keyword">return</span> <span class="literal">false</span>;
+});
+obj.on(<span class="string">'event'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="comment">// do sth</span>
+});
+
+obj.trigger(<span class="string">'event'</span>); <span class="comment">// return false</span></code></pre></div><p><strong>注意</strong>：<code>on</code> 和 <code>off</code> 的 <code>event</code> 参数也可以表示多个事件（用空格分隔），比如：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> obj = <span class="keyword">new</span> Events();
+
+obj.on(<span class="string">'x y'</span>, fn);
+
+<span class="comment">// 等价：</span>
+obj.on(<span class="string">'x'</span>).on(<span class="string">'y'</span>);</code></pre></div><h2 id="mixto-events-mixto-receiver">mixTo <code>Events.mixTo(receiver)</code><a href="#mixto-events-mixto-receiver" class="anchor">¶</a></h2><p>将 <code>Events</code> 的原型方法混入到指定对象或函数原型中。</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

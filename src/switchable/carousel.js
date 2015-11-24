@@ -1,5 +1,5 @@
-var Switchable = require('switchable/switchable');
-var $ = require('$');
+var Switchable = require('switchable/switchable'),
+	$ = require('$');
 
 // 旋转木马组件
 var Carousel = Switchable.extend({
@@ -114,6 +114,8 @@ var Carousel = Switchable.extend({
 });
 
 module.exports = Carousel;
+
+require('class/class-loader').register('switchable/carousel', Carousel);
 
 
 // Helpers

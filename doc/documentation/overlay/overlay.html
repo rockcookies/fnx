@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Overlay-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../readme.html" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../readme.html">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Overlay</h1>
+		<p>基础浮层组件，提供浮层显示隐藏、定位、窗口 resize 时重新定位、是所有浮层类组件的基类。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<blockquote>
+<p>如果要开发一个浮层类的 UI 组件，可以基于它进行扩展，dialog、poptip、popup 等模块均继承了 Overlay 。</p>
+</blockquote>
+<p>Overlay 继承了 <a href="../widget/widget.html">Widget</a>，可使用其中包括 <a href="../base/base.html">Base</a>、<a href="../class/class.html">Class</a>、<a href="../events/events.html">Events</a>、<a href="../base/attrs.html">Attrs</a>、<a href="../base/aspect.html">Aspect</a> 的属性和方法。</p>
+<h1 id="配置说明">配置说明<a href="#配置说明" class="anchor">¶</a></h1><h2 id="element-element">element <code>element</code><a href="#element-element" class="anchor">¶</a></h2><p>页面 dom 节点，只读。</p>
+<h2 id="template-string">template <code>string</code><a href="#template-string" class="anchor">¶</a></h2><p>浮层容器的模板，如<code>&lt;div class=&quot;myoverlay&quot;&gt;&lt;/div&gt;</code>，只读。和 <code>element</code> 属性二者择一即可。</p>
+<h2 id="zindex-string-number">zIndex <code>string|number</code><a href="#zindex-string-number" class="anchor">¶</a></h2><p>浮层的 z-index 属性。</p>
+<h2 id="width-string-number">width <code>string|number</code><a href="#width-string-number" class="anchor">¶</a></h2><p>浮层宽度(px)。</p>
+<h2 id="height-string-number">height <code>string|number</code><a href="#height-string-number" class="anchor">¶</a></h2><p>浮层高度(px)。</p>
+<h2 id="id-string">id <code>string</code><a href="#id-string" class="anchor">¶</a></h2><p>浮层的初始化 id 。</p>
+<h2 id="classname-string">className <code>string</code><a href="#classname-string" class="anchor">¶</a></h2><p>浮层的初始化 className 。</p>
+<h2 id="style-object">style <code>object</code><a href="#style-object" class="anchor">¶</a></h2><p>浮层的初始化 style 对象。</p>
+<h2 id="parentnode-element">parentNode <code>element</code><a href="#parentnode-element" class="anchor">¶</a></h2><p>浮层的父元素，默认为 document.body，只读。</p>
+<h2 id="align-object">align <code>object</code><a href="#align-object" class="anchor">¶</a></h2><p>定位对象，形似下面代码。这块的定位原理可参照 <a href="../position/position.html">position</a> 组件的 <em>pin</em> 方法。</p>
+<div class="highlight"><pre><code class="javascript">{
+    selfXY: [<span class="number">0</span>, <span class="number">0</span>],     <span class="comment">// element 的定位点，默认为左上角</span>
+    baseElement: Position.VIEWPORT,     <span class="comment">// 基准定位元素，默认为当前可视区域</span>
+    baseXY: [<span class="number">0</span>, <span class="number">0</span>]      <span class="comment">// 基准定位元素的定位点，默认为左上角</span>
+}</code></pre></div><h1 id="方法说明">方法说明<a href="#方法说明" class="anchor">¶</a></h1><h2 id="render">render()<a href="#render" class="anchor">¶</a></h2><p>生成浮层的dom结构和样式并插入文档流。</p>
+<h2 id="show">show()<a href="#show" class="anchor">¶</a></h2><p>显示浮层，第一次调用时会进行render()操作。</p>
+<h2 id="hide">hide()<a href="#hide" class="anchor">¶</a></h2><p>隐藏浮层。</p>
+<h2 id="get-key">get(key)<a href="#get-key" class="anchor">¶</a></h2><p>获得属性值。</p>
+<h2 id="set-key-value">set(key, value)<a href="#set-key-value" class="anchor">¶</a></h2><p>非只读属性都可以通过set方法修改，并会立刻反映到浮层上。API 里的所有属性都可以修改。</p>
+<h1 id="最佳实践">最佳实践<a href="#最佳实践" class="anchor">¶</a></h1><p><strong>注意</strong> 务必将浮层元素在 CSS 上设置 <code>position: absolute or fixed</code>, 并且设置有效的 left/top 值.
+以避免当没有设置 left/top 时, 在浮层元素插入到页面底部后, 瞬间出现浏览器滚动条后, 获取可视区域宽高错误, 以致定位有几像素偏差的问题.</p>
+<h2 id="1-直接使用：">1. 直接使用：<a href="#1-直接使用：" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Overlay = FNX.include(<span class="string">'overlay/overlay'</span>);
+
+<span class="keyword">var</span> overlay = <span class="keyword">new</span> Overlay({
+    template: <span class="string">'&lt;div class="overlay"&gt;&lt;/div&gt;'</span>,
+    width: <span class="number">500</span>,
+    height: <span class="number">200</span>,
+    zIndex: <span class="number">99</span>,
+    style: <span class="string">'border:1px solid red;color:green;'</span>,
+    parentNode: <span class="string">'#c'</span>,
+    align: {
+        selfXY: [<span class="string">'-100%'</span>, <span class="number">0</span>],
+        baseElement: <span class="string">'#a'</span>,
+        baseXY: [<span class="number">0</span>, <span class="number">0</span>]
+    }
+});
+
+overlay.show();
+
+<span class="comment">// 修改元素样式</span>
+overlay.set(<span class="string">'style'</span>, {
+    backgroundColor: <span class="string">'red'</span>,
+    border: <span class="string">'1px solid green'</span>
+});
+
+<span class="comment">// 非只读属性都可以通过 set 方法进行更新</span>
+overlay.set(<span class="string">'width'</span>, <span class="number">500</span>);
+overlay.set(<span class="string">'className'</span>, <span class="string">'myclass'</span>);</code></pre></div><h2 id="2-继承使用：">2. 继承使用：<a href="#2-继承使用：" class="anchor">¶</a></h2><p>继承使用时，如果需要覆盖父类的 setup、show、hide 方法，强烈建议这样<code>Dialog.superclass.show.call(this);</code>调用一下父类的方法，否则可能造成一些特性的丢失。</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Overlay = FNX.include(<span class="string">'overlay/overlay'</span>);
+
+<span class="keyword">var</span> Dialog = Overlay.extend({
+    attrs: {
+        trigger: <span class="literal">null</span>,
+        triggerType: <span class="string">'click'</span>,
+        hasMask: <span class="literal">false</span>,
+        onComfirm: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>},
+        onClose: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>}
+    },
+    setup: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        Dialog.superclass.setup.call(<span class="keyword">this</span>);
+    },
+    show: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        Dialog.superclass.show.call(<span class="keyword">this</span>);
+        <span class="comment">// add sth.</span>
+    }
+});</code></pre></div><h1 id="示例">示例<a href="#示例" class="anchor">¶</a></h1><ul>
+<li><a href="examples/overlay-basic.html">基本示例</a></li>
+</ul>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

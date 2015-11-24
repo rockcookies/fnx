@@ -1,10 +1,9 @@
-var $ = require('$'),
-	Easing = require('easing/easing');
+var $ = require('$');
 
+require('easing/easing');
 
 var SCROLLX = 'scrollx',
-	SCROLLY = 'scrolly',
-	FADE = 'fade';
+	SCROLLY = 'scrolly';
 
 var Effects = module.exports = {};
 
@@ -217,7 +216,6 @@ function scrollCarousel (panelInfo, isX, viewsize) {
 		toIndex = panelInfo.toIndex,
 		fromIndex = panelInfo.fromIndex,
 		len = this.get('length'),
-		panels = this.get('panels'),
 		props = {};
 
 	props[prop] = -(viewsize * toIndex * step) + 'px';

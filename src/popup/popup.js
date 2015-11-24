@@ -1,8 +1,6 @@
 var $ = require('$'),
     Overlay = require('overlay/overlay'),
-    OverlayMask = require('overlay/mask');
-
-var mask = null;
+    PopupMask = require('overlay/mask');
 
 // Popup
 // ---
@@ -27,10 +25,15 @@ var Popup = Overlay.extend({
 		height: null,
 
 		// 不用解释了吧
-		zIndex: 999,
+		zIndex: {
+			value: null,
+			getter: function (val) {
+				return val === null ? Popup.zIndex : val;
+			}
+		},
 
-		// 简单的动画效果 none | fade
-		effect: 'none',
+		// 是否支持自动聚焦
+		autofocus: true,
 
 		// 默认定位左右居中，略微靠上
 		align: {
@@ -40,7 +43,6 @@ var Popup = Overlay.extend({
 			},
 			getter: function (val) {
 				// 高度超过窗口的 42/50 浮层头部顶住窗口
-				// https://github.com/aralejs/dialog/issues/41
 				if (this.element.height() > $(window).height() * 0.84) {
 					return {
 						selfXY: ['50%', '0'],
@@ -53,118 +55,142 @@ var Popup = Overlay.extend({
 	},
 
 	destroy: function () {
+		if (Popup.current === this) {
+            Popup.current = null;
+        }
 		this.element.remove();
-		this._hideMask();
 		return Popup.superclass.destroy.call(this);
 	},
 
 	setup: function () {
-		//加载全局遮罩
-		if (!mask) {
-			mask = new OverlayMask();
-			//设置Mask的tabindex
-			toTabed(mask.element,0);
-		}
+		this._setupPopup();
+		this._setupFocus();
+		this._setupMask();
 
 		Popup.superclass.setup.call(this);
-
-		this._setupMask();
-		this._setupFocus();
-		toTabed(this.element);
 	},
 
-	// 绑定遮罩层事件
+	// 初始化弹出层
+	_setupPopup: function () {
+		toTabed(this.element, -1);
+	},
+
 	_setupMask: function () {
-		var that = this;
-
-		// 存放 mask 对应的对话框
-		mask._dialogs = mask._dialogs || [];
-
 		this.after('show', function () {
-			if (!this.get('hasMask')) {
-				return;
-			}
-			// not using the z-index
-			// because multiable dialogs may share same mask
-			mask.set('zIndex', that.get('zIndex'))
-				.set('backgroundColor', that.get('maskBackgroundColor'))
-				.set('backgroundOpacity', that.get('maskBackgroundOpacity'))
-				.show();
-			mask.element.insertBefore(that.element);
-
-			// 避免重复存放
-			var existed;
-			for (var i=0; i<mask._dialogs.length; i++) {
-				if (mask._dialogs[i] === that) {
-					existed = mask._dialogs[i];
-				}
-			}
-			if (existed) {
-				// 把已存在的对话框提到最后一个
-				erase(existed, mask._dialogs);
-				mask._dialogs.push(existed);
-			} else {
-				// 存放新的对话框
-				mask._dialogs.push(that);
-			}
+			this.get('hasMask') && this._showMask();
 		});
 
-		this.after('hide', this._hideMask);
+		this.after('hide', function () {
+			this.get('hasMask') && this._hideMask();
+		});
+
+		this.before('destroy', function () {
+			this._mask && this._mask.destroy();
+			this._mask = null;
+		});
 	},
 
-	// 隐藏 mask
+	_showMask: function () {
+		if (!this._mask) {
+			this._mask = this._createMask();
+			this._mask.element.insertBefore(this.element);
+		}
+
+		this._mask.set('zIndex', this.get('zIndex'));
+		this._mask.show();
+	},
+
 	_hideMask: function () {
-		if (!this.get('hasMask')) {
-			return;
-		}
-
-		// 移除 mask._dialogs 当前实例对应的 dialog
-		var dialogLength = mask._dialogs ? mask._dialogs.length : 0;
-		for (var i=0; i<dialogLength; i++) {
-			if (mask._dialogs[i] === this) {
-				erase(this, mask._dialogs);
-
-				// 如果 _dialogs 为空了，表示没有打开的 dialog 了
-				// 则隐藏 mask
-				if (mask._dialogs.length === 0) {
-					mask.hide();
-				}
-				// 如果移除的是最后一个打开的 dialog
-				// 则相应向下移动 mask
-				else if (i === dialogLength - 1) {
-					var last = mask._dialogs[mask._dialogs.length - 1];
-					mask.set('zIndex', last.get('zIndex'));
-					mask.element.insertBefore(last.element);
-				}
-			}
-		}
+		this._mask && this._mask.hide();
 	},
 
 	// 绑定元素聚焦状态
 	_setupFocus: function () {
+		this.before('show', function () {
+			this.__activeElement = getActiveElement();
+		});
 		this.after('show', function () {
-			this.element.focus();
+			this.get('autofocus') && this.focus();
 		});
 	},
 
-	// onRender
-	//---
-	_onRenderVisible: function (val) {
-		if (val) {
-			if (this.get('effect') === 'fade') {
-				// 固定 300 的动画时长，暂不可定制
-				this.element.fadeIn(300);
+	_createMask: function () {
+		var mask = new PopupMask();
+		//设置Mask的tabindex
+		toTabed(mask.element, 0);
+
+		mask.set('backgroundColor', this.get('maskBackgroundColor'));
+		mask.set('backgroundOpacity', this.get('maskBackgroundOpacity'));
+		mask.element.on('focus', $.proxy(this.focus, this));
+
+		return mask;
+	},
+
+	/** 是不是顶层 */
+	isTop: function () {
+		return Popup.current === this;
+	},
+
+	/** 让浮层获取焦点 */
+	focus: function () {
+		var current = Popup.current;
+		var index = Popup.zIndex++;
+
+		if (current && current !== this) {
+			current.blur(false);
+        }
+
+		// 检查焦点是否在浮层里面
+		if (!$.contains(this.element[0], getActiveElement())) {
+			var autofocus = this.element.find('[autofocus]')[0];
+
+			if (!this._autofocus && autofocus) {
+				this._autofocus = true;
 			} else {
-				this.element.show();
+				autofocus = this.element[0];
 			}
-		} else {
-			this.element.hide();
+			this._focus(autofocus);
 		}
+
+
+		Popup.current = this;
+		this.set('zIndex', index);
+	},
+
+	/** 让浮层失去焦点。将焦点退还给之前的元素，照顾视力障碍用户 */
+	blur: function () {
+		var activeElement = this.__activeElement;
+		var isBlur = arguments[0];
+
+		if (isBlur !== false) {
+			this._focus(activeElement);
+		}
+
+		this._autofocus = false;
+	},
+
+	_focus: function (elem) {
+		// 防止 iframe 跨域无权限报错
+        // 防止 IE 不可见元素报错
+        try {
+            // ie11 bug: iframe 页面点击会跳到顶部
+            if (this.get('autofocus') && !/^iframe$/i.test(elem.nodeName)) {
+                elem.focus();
+            }
+        } catch (e) {}
 	}
 })
 
 
 module.exports = Popup;
+
+require('class/class-loader').register('popup/popup', module.exports);
+
+/** 当前叠加高度 */
+Popup.zIndex = 1024;
+
+/** 顶层浮层的实例 */
+Popup.current = null;
 
 // Helpers
 // ----
@@ -175,16 +201,11 @@ function toTabed(element, num) {
 	element.attr('tabindex', isNaN(num) ? -1 : num);
 }
 
-// erase item from array
-function erase(item, array) {
-	var index = -1;
-	for (var i=0; i<array.length; i++) {
-		if (array[i] === item) {
-			index = i;
-			break;
-		}
-	}
-	if (index !== -1) {
-		array.splice(index, 1);
-	}
+function getActiveElement () {
+	try {// try: ie8~9, iframe #26
+		var activeElement = document.activeElement;
+		var contentDocument = activeElement.contentDocument;
+		var elem = contentDocument && contentDocument.activeElement || activeElement;
+		return elem;
+	} catch (e) {}
 }

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Combobox-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../readme.html" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../readme.html">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Combobox</h1>
+		<p>Combobox 是可触发的浮层组件。封装了当用户点击、hover、focus 到指定元素时，可以触发另一个浮层显示的行为，点击页面空白处浮层消失等等特性。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<p>Combobox 继承了 <a href="../overlay/overlay.html">Overlay</a>，可使用其中属性和方法。</p>
+<h1 id="配置说明">配置说明<a href="#配置说明" class="anchor">¶</a></h1><h2 id="element-element-string">element <code>element|string</code><a href="#element-element-string" class="anchor">¶</a></h2><p>弹出的浮层元素。也可以使用 template 参数传递模板来代替这个参数。</p>
+<h2 id="trigger-element-string">trigger <code>element|string</code><a href="#trigger-element-string" class="anchor">¶</a></h2><p>触发元素。</p>
+<h2 id="triggertype-string">triggerType <code>string</code><a href="#triggertype-string" class="anchor">¶</a></h2><p>触发类型，可选[hover|click|focus]，默认为 hover。</p>
+<h2 id="delay-number">delay <code>number</code><a href="#delay-number" class="anchor">¶</a></h2><p>延迟 hover 触发显示的时长，默认 70 毫秒。设为<code>-1</code>时，表示 Combobox 没有延迟显示和隐藏因素而变为 tooltip 的效果。</p>
+<h2 id="disabled-boolean">disabled <code>boolean</code><a href="#disabled-boolean" class="anchor">¶</a></h2><p>是否能触发弹出效果，可用<code>.set(&#39;disabled&#39;, true)</code>进行开关。</p>
+<h2 id="align-object">align <code>object</code><a href="#align-object" class="anchor">¶</a></h2><p>定位参数。</p>
+<h1 id="最佳实践">最佳实践<a href="#最佳实践" class="anchor">¶</a></h1><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">var</span> example = <span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId'</span>,
+    element: <span class="string">'#targetId'</span>
+});</code></pre></div><p>需要 tooltip 效果的请如下调用：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+<span class="keyword">var</span> example = <span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'#triggerId'</span>,
+    element: <span class="string">'#targetId'</span>,
+    delay: -<span class="number">1</span>
+});</code></pre></div><p>另外，Popup 已从 Overlay 继承了窗口改变大小后浮层重新定位等被动属性。</p>
+<h2 id="动态内容">动态内容<a href="#动态内容" class="anchor">¶</a></h2><p>当有多个触发元素，而弹出层是同一个，而且内容是根据不同触发元素而不同时，可以用下面的方式进行绑定：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Combobox = FNX.include(<span class="string">'combobox/combobox'</span>);
+
+
+<span class="keyword">new</span> Combobox({
+    trigger: <span class="string">'.triggerClass'</span>, <span class="comment">// 有多个触发元素</span>
+    element: <span class="string">'#combobox'</span>
+}).before(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="comment">// 通过 activeTrigger 拿到当前触发的触发元素</span>
+    <span class="keyword">var</span> content = <span class="keyword">this</span>.activeTrigger.html();
+    <span class="comment">// 动态设定内容</span>
+    <span class="keyword">this</span>.element.html(content);
+});</code></pre></div><h1 id="示例">示例<a href="#示例" class="anchor">¶</a></h1><ul>
+<li><a href="examples/combobox-basic.html">基本示例</a></li>
+<li><a href="examples/combobox-triggers.html">多 triggers 的情况</a></li>
+<li><a href="examples/combobox-select-in-element.html">select in element</a></li>
+</ul>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

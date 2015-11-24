@@ -8,6 +8,7 @@
 //  - https://github.com/joyent/node/blob/master/lib/util.js
 //  - https://github.com/kissyteam/kissy/blob/master/src/seed/src/kissy.js
 
+var Lang = require('lang/lang');
 
 // The base Class implementation.
 function Class(o) {
@@ -17,7 +18,8 @@ function Class(o) {
   }
 }
 
-module.exports = Class
+module.exports = Class;
+require('./class-loader').register('class/class', Class);
 
 
 // Create a new Class.
@@ -167,25 +169,8 @@ function mix(r, s, wl) {
 }
 
 
-var toString = Object.prototype.toString
 
-var isArray = Array.isArray || function(val) {
-    return toString.call(val) === '[object Array]'
-}
 
-var isFunction = function(val) {
-  return toString.call(val) === '[object Function]'
-}
-
-var indexOf = Array.prototype.indexOf ?
-    function(arr, item) {
-      return arr.indexOf(item)
-    } :
-    function(arr, item) {
-      for (var i = 0, len = arr.length; i < len; i++) {
-        if (arr[i] === item) {
-          return i
-        }
-      }
-      return -1
-    }
+var isArray = Lang.isArray,
+    isFunction = Lang.isFunction,
+    indexOf = Lang.indexOf;

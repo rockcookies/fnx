@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Widget-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../readme.html" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../readme.html">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Widget</h1>
+		<p>Widget 是 UI 组件的基础类，约定了组件的基本生命周期，实现了一些通用功能。基于 Widget 可以构建出任何你想要的 Web 界面组件。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<p>Widget 继承了 <a href="../base/base.html">base</a>，可使用其中包括 <a href="../class/class.html">class</a>、<a href="../events/events.html">events</a>、<a href="../base/attrs.html">attrs</a>、<a href="../base/aspect.html">aspect</a> 等功能。</p>
+<h1 id="使用说明">使用说明<a href="#使用说明" class="anchor">¶</a></h1><ul>
+<li><a href="examples/basic.html">基本的事件操作</a></li>
+<li><a href="examples/simple-tabview.html">简单的 TabView</a></li>
+</ul>
+<h1 id="简单的继承">简单的继承<a href="#简单的继承" class="anchor">¶</a></h1><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> WidgetA = Widget.extend({
+  attrs: {
+    a: <span class="number">1</span>
+  },
+
+  method: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    console.log(<span class="keyword">this</span>.get(<span class="string">'a'</span>));
+  }
+});
+
+<span class="keyword">var</span> widget = <span class="keyword">new</span> WidgetA({
+  a: <span class="number">2</span>
+}).render();
+widget.method(); <span class="comment">// =&gt; 2</span></code></pre></div><h1 id="生命周期">生命周期<a href="#生命周期" class="anchor">¶</a></h1><p>Widget 有一套完整的生命周期，控制着组件从创建到销毁的整个过程。主要有 <code>initialize</code>，<code>render</code>，<code>destroy</code> 三个过程。</p>
+<h2 id="initialize">Initialize<a href="#initialize" class="anchor">¶</a></h2><p>Widget 在实例化的时候会做一系列操作：</p>
+<div class="highlight"><pre><code class="javascript">.initAttrs() <span class="comment">// 初始化属性，将实例化时的数据和默认属性做混合</span>
+.parseElement() <span class="comment">// 模板解析</span>
+.initProps() <span class="comment">// 提供给用户处理属性</span>
+.delegateEvents() <span class="comment">// 事件代理，将事件代理到 `this.element` 上</span>
+.setup() <span class="comment">// 实例化最后一步，用户自定义操作，提供给子类继承。</span></code></pre></div><p>具体方法的使用可查看 API 文档。</p>
+<h2 id="render">Render<a href="#render" class="anchor">¶</a></h2><p>将 <code>this.element</code> 插入到文档流，默认插入到 document.body，可以通过 parentNode 指定。</p>
+<p>Render 这一步操作从 Initialize 中独立出来，因为有些组件在实例化的时候不希望操作 DOM，如果希望实例化的时候处理可在 setup 里调用 <code>this.render()</code>。</p>
+<h2 id="destroy">Destroy<a href="#destroy" class="anchor">¶</a></h2><p>组件销毁。将 widget 生成的 element 和事件都销毁。</p>
+<h1 id="和-attrs-的关系">和 Attrs 的关系<a href="#和-attrs-的关系" class="anchor">¶</a></h1><p>Widget 使用了 Attrs，支持 getter/setter，但 Widget 做了一层扩展。</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> WidgetB = Widget.extend({
+  attrs: {
+    a: <span class="number">1</span>
+  },
+
+  _onRenderA: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+    console.log(val)
+  }
+});
+
+<span class="keyword">var</span> widget = <span class="keyword">new</span> WidgetB();
+widget.render(); <span class="comment">// =&gt; 1</span>
+widget.set(<span class="string">'a'</span>, <span class="number">2</span>); <span class="comment">// =&gt; 2</span></code></pre></div><p>提供了 <code>_onRender</code> + 属性名(首字母大写)的特性，在两种情况会触发</p>
+<ol>
+<li><p>在属性改变的时候</p>
+</li>
+<li><p>在调用 render 方法的时候(插入文档流之前)，但当属性值为 <code>null</code> 或 <code>undefined</code> 时则不会触发。</p>
+</li>
+</ol>
+<h1 id="模板渲染">模板渲染<a href="#模板渲染" class="anchor">¶</a></h1><p>每个 Widget 只会对应一个 element，会对他的 DOM 及事件进行操作。</p>
+<p>element 的生成有两种情况</p>
+<ol>
+<li>实例化的时候传入</li>
+<li>由 template 生成</li>
+</ol>
+<p>Widget 默认处理模板的方式是直接转换成 jQuery 对象，但不能处理数据。涉及到复杂的模板可以覆盖 <code>parseElementFromTemplate</code> 方法，可以继承覆盖也可以混入（比如 <a href="../templatable/templatable.html">templatable</a>）。</p>
+<h1 id="事件代理">事件代理<a href="#事件代理" class="anchor">¶</a></h1><p>事件代理是 Widget 非常好用的特性，将所有的事件都代理到 <code>this.element</code> 上。这样可以使得对应的
+DOM 内容有修改时，无需重新绑定，在 destroy 的时候也会销毁这些事件。</p>
+<p><code>widget.delegateEvents()</code> 会在实例初始化时自动调用，这时会从 <code>this.events</code> 中取得声明的代理事件，比如</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    events: {
+        <span class="string">"dblclick"</span>: <span class="string">"open"</span>,
+        <span class="string">"click .icon.doc"</span>: <span class="string">"select"</span>,
+        <span class="string">"mouseover .date"</span>: <span class="string">"showTooltip"</span>
+    },
+    open: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        ...
+    },
+    select: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        ...
+    },
+    ...
+});</code></pre></div><p><code>events</code> 中每一项的格式是：<code>&quot;event selector&quot;: &quot;callback&quot;</code>，当省略 <code>selector</code>
+时，默认会将事件绑定到 <code>this.element</code> 上。<code>callback</code> 可以是字符串，表示当前实例上的方法名；
+也可以直接传入函数。</p>
+<p><code>events</code> 还可以是方法，返回一个 events hash 对象即可。比如</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    events: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">var</span> hash = {
+            <span class="string">"click"</span>: <span class="string">"open"</span>,
+            <span class="string">"click .close"</span>: <span class="string">"close"</span>
+        };
+
+        <span class="keyword">return</span> hash;
+    },
+    ...
+});</code></pre></div><h1 id="api-说明">API 说明<a href="#api-说明" class="anchor">¶</a></h1><h2 id="extend-extend-properties">extend <code>.extend(properties)</code><a href="#extend-extend-properties" class="anchor">¶</a></h2><p>使用 <code>extend</code> 方法，可以基于 <code>Widget</code> 来创建子类。</p>
+<div class="highlight"><pre><code class="javascript">define(<span class="function"><span class="keyword">function</span><span class="params">(require, exports, module)</span> {</span>
+    <span class="keyword">var</span> Widget = require(<span class="string">'fnx/cmp/widget/widget'</span>);
+
+    <span class="comment">// 定义 SimpleTabView 类</span>
+    <span class="keyword">var</span> SimpleTabView = Widget.extend({
+        events: {
+            <span class="string">'click .nav li'</span>: <span class="string">'switchTo'</span>
+        },
+        switchTo: <span class="function"><span class="keyword">function</span><span class="params">(index)</span> {</span>
+            ...
+        },
+        ...
+    });
+
+    <span class="comment">// 实例化</span>
+    <span class="keyword">var</span> demo = <span class="keyword">new</span> SimpleTabView({ element: <span class="string">'#demo'</span> }).render();
+});</code></pre></div><p>详细示例请访问：<a href="../examples/simple-tabview.html">simple-tabview.html</a></p>
+<h2 id="initialize-new-widget-config">initialize <code>new Widget([config])</code><a href="#initialize-new-widget-config" class="anchor">¶</a></h2><p>Widget 实例化时，会调用此方法。</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> widget = <span class="keyword">new</span> Widget({
+   element: <span class="string">'#demo'</span>,
+   className: <span class="string">'widget'</span>,
+   model: {
+       title: <span class="string">'设计原则'</span>,
+       content: <span class="string">'开放、简单、易用'</span>
+   }
+});</code></pre></div><p><code>config</code> 参数用来传入选项，实例化后可以通过 <code>get/set</code> 访问。<code>config</code>
+参数如果包含 <code>element</code> 和 <code>model</code> 属性，实例化后会直接放到 <code>this</code> 上，即可通过
+<code>this.element</code>、<code>this.model</code> 来获取。</p>
+<p>在 <code>initialize</code> 方法中，确定了组件构建的基本流程：</p>
+<div class="highlight"><pre><code class="javascript"><span class="comment">// 初始化 attrs</span>
+<span class="keyword">this</span>.initAttrs(config, dataAttrsConfig);
+
+<span class="comment">// 初始化 props</span>
+<span class="keyword">this</span>.parseElement();
+<span class="keyword">this</span>.initProps();
+
+<span class="comment">// 初始化 events</span>
+<span class="keyword">this</span>.delegateEvents();
+
+<span class="comment">// 子类自定义的初始化</span>
+<span class="keyword">this</span>.setup();</code></pre></div><p>下面逐一讲述。</p>
+<h2 id="initattrs-initattrs-config">initAttrs <code>.initAttrs(config)</code><a href="#initattrs-initattrs-config" class="anchor">¶</a></h2><p>属性的初始化方法。通过该方法，会将用户传入的配置与所继承的默认属性进行合并，并进行初始化操作。</p>
+<p>子类如果想在 <code>initAttrs</code> 执行之前或之后进行一些额外处理，可以覆盖该方法：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    initAttrs: <span class="function"><span class="keyword">function</span><span class="params">(config)</span> {</span>
+        <span class="comment">// 提前做点处理</span>
+
+        <span class="comment">// 调用父类的</span>
+        MyWidget.superclass.initAttrs.call(<span class="keyword">this</span>, config);
+
+        <span class="comment">// 之后做点处理</span>
+    }
+});</code></pre></div><p><strong>注意</strong>：一般情况下不需要覆盖 <code>initAttrs</code>。</p>
+<h2 id="parseelement-widget-parseelement">parseElement <code>widget.parseElement()</code><a href="#parseelement-widget-parseelement" class="anchor">¶</a></h2><p>该方法只干一件事：根据配置信息，构建好 <code>this.element</code>。</p>
+<p>默认情况下，如果 <code>config</code> 参数中传入了 <code>element</code> 属性（取值可为 DOM element / selector），
+会直接根据该属性来获取 <code>this.element</code> 对象。</p>
+<p><code>this.element</code> 是一个 jQuery / Zepto 对象。</p>
+<h2 id="parseelementfromtemplate-widget-parseelementfromtemplate">parseElementFromTemplate <code>widget.parseElementFromTemplate()</code><a href="#parseelementfromtemplate-widget-parseelementfromtemplate" class="anchor">¶</a></h2><p>如果 <code>config</code> 参数中未传入 <code>element</code> 属性，则会根据 <code>template</code> 属性来构建
+<code>this.element</code>。 默认的 <code>template</code> 是 <code>&lt;div&gt;&lt;/div&gt;</code>。</p>
+<p>子类可覆盖该方法，以支持 Handlebars、Mustache 等模板引擎，可以使用 <a href="../../templatable/index.html">templatable</a> 混入使用。</p>
+<h2 id="element-element">element <code>.element</code><a href="#element-element" class="anchor">¶</a></h2><p>widget 实例对应的 DOM 根节点，是一个 jQuery / Zepto 对象，每个 widget 只有一个 element。</p>
+<h2 id="initprops-initprops">initProps <code>.initProps()</code><a href="#initprops-initprops" class="anchor">¶</a></h2><p>properties 的初始化方法，提供给子类覆盖，比如：</p>
+<div class="highlight"><pre><code class="javascript">initProps: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="keyword">this</span>.targetElement = $(<span class="keyword">this</span>.get(<span class="string">'target'</span>));
+}</code></pre></div><h2 id="delegateevents-delegateevents">delegateEvents <code>.delegateEvents()</code><a href="#delegateevents-delegateevents" class="anchor">¶</a></h2><p>通过 <code>delegateEvents</code> 方法动态添加事件代理：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> myWidget = <span class="keyword">new</span> Widget();
+
+myWidget.delegateEvents()
+myWidget.delegateEvents({
+  <span class="string">'click p'</span>: <span class="string">'fn1'</span>,
+  <span class="string">'click li'</span>: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>}
+})
+myWidget.delegateEvents(<span class="string">'click p'</span>, fn1)
+myWidget.delegateEvents(<span class="string">'click p'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>})</code></pre></div><p>也可以通过 <code>delegateEvents</code> 代理在 <code>element</code> 以外的 DOM 上</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">this</span>.delegateEvents(<span class="string">'#trigger'</span>, <span class="string">'click p'</span>, fn1)
+<span class="keyword">this</span>.delegateEvents($(<span class="string">'#trigger'</span>), <span class="string">'click'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>})</code></pre></div><p>以上等价于 <code>$(&#39;#trigger&#39;).on(&#39;click&#39;, &#39;p&#39;, fn1)</code></p>
+<h2 id="undelegateevents-undelegateevents">undelegateEvents <code>.undelegateEvents()</code><a href="#undelegateevents-undelegateevents" class="anchor">¶</a></h2><p>卸载事件代理。不带参数时，表示卸载所有事件。</p>
+<div class="highlight"><pre><code class="javascript">.undelegateEvents(); <span class="comment">// 卸载全部事件</span>
+.undelegateEvents(events); <span class="comment">// 卸载指定事件的全部 handler</span>
+.undelegateEvents(element, events); <span class="comment">// 卸载指定 element 指定事件的全部 handler</span></code></pre></div><h2 id="setup-setup">setup <code>.setup()</code><a href="#setup-setup" class="anchor">¶</a></h2><p>提供给子类覆盖的初始化方法。可以在此处理更多初始化信息，比如</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> TabView = Widget.extend({
+    ...
+    setup: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.activeIndex = getActiveIndex();
+    },
+    ...
+});</code></pre></div><h2 id="render-render">render <code>.render()</code><a href="#render-render" class="anchor">¶</a></h2><p>提供给子类覆盖的初始化方法。render 方法只干一件事情：将 <code>this.element</code> 渲染到页面上。</p>
+<p>默认无需覆盖。需要覆盖时，请使用 <code>return this</code> 来保持该方法的链式约定。</p>
+<h2 id="selector">$ <code>.$(selector)</code><a href="#selector" class="anchor">¶</a></h2><p>在 <code>this.element</code> 内查找匹配节点。</p>
+<h2 id="destroy-destroy">destroy <code>.destroy()</code><a href="#destroy-destroy" class="anchor">¶</a></h2><p>销毁实例。</p>
+<h2 id="on-on-event-callback-context">on <code>.on(event, callback, [context])</code><a href="#on-on-event-callback-context" class="anchor">¶</a></h2><p>这是从 Events 中自动混入进来的方法。还包括 <code>off</code> 和 <code>trigger</code>。</p>
+<p>具体使用请参考 <a href="../events/events.html">events 使用文档</a>。</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

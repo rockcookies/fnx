@@ -25,6 +25,9 @@ var SwitchableBasic = Widget.extend({
 		// 是否包含 triggers，用于没有传入 triggers 时，是否自动生成的判断标准
 		hasTriggers: true,
 
+		// 在只有一个 trigger 时是否自动隐藏
+		autoHideTriggers: true,
+
 		// 触发类型 hover 或者是 click
 		triggerType: 'hover',
 
@@ -131,7 +134,8 @@ var SwitchableBasic = Widget.extend({
 
 	//初始化触发器
 	_initTriggers: function (role) {
-		var triggers = this.get('triggers');
+		var triggers = this.get('triggers'),
+			length = this.get('length');
 
 		// 再获取 triggers 和 nav
 		if (triggers.length > 0) {}
@@ -144,7 +148,7 @@ var SwitchableBasic = Widget.extend({
 			// 空的 nav 标记
 			if (triggers.length === 0) {
 				triggers = generateTriggersMarkup(
-						this.get('length'),
+						length,
 						this.get('activeIndex'),
 						this.get('activeTriggerClass'),
 						true
@@ -158,7 +162,7 @@ var SwitchableBasic = Widget.extend({
 		// hasTriggers 为 true，则自动生成 triggers
 		else if (this.get('hasTriggers')) {
 			this.nav = generateTriggersMarkup(
-					this.get('length'),
+					length,
 					this.get('activeIndex'),
 					this.get('activeTriggerClass')
 				).appendTo(this.element);
@@ -174,12 +178,16 @@ var SwitchableBasic = Widget.extend({
 		triggers.addClass(this.CONST.TRIGGER_CLASS).each(function (i, trigger) {
 			$(trigger).data('value', i);
 		});
+
+		if (length <= 1 && this.get('autoHideTriggers')) {
+			triggers.hide();
+		}
 	},
 
 	_bindTriggers: function () {
 		var that = this,
 			triggers = this.get('triggers'),
-			type = this.get('triggerType').
+			type = this.get('triggerType'),
 			switchTimer = null;
 
 		if (type === 'click') {

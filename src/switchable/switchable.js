@@ -13,9 +13,6 @@ var Switahable = SwitchableBasic.extend({
 		// 是否循环播放
 		circular: false,
 
-		// 循环模式是旋转木马还是幻灯片 slide，carousel
-		circularMode: 'carousel',
-
 		// 动画效果
 		effect: {
 			value : 'none',
@@ -61,35 +58,38 @@ var Switahable = SwitchableBasic.extend({
 		}
 	},
 
+	_invokeEffect: function (fn) {
+		var ef = Effects[this.get('effect')];
+		if (ef && ef[fn]) {
+			var args = Array.prototype.slice.call(arguments, 1);
+
+			return ef[fn].apply(this, args);
+		}
+	},
+
 	//初始化面板
 	_initPanels: function (role) {
 		Switahable.superclass._initPanels.call(this, role);
-		var panels = this._effectFunction('initPanels').call(this, this.get('panels'));
+		var panels = this._invokeEffect('initPanels', this.get('panels'));
 
 		if (panels) {
 			this.set('panels', panels);
 		}
 	},
 
-	// 初始化效果
+		// 初始化效果
 	_initEffect: function () {
-		if (this._effectFunction('initEffect').call(this) === false) {
+		if (this._invokeEffect('initEffect') === false) {
 			this._ineffective = true;
 		}
 	},
 
-	_effectFunction: function (fn) {
-		var ef = Effects[this.get('effect')];
-		if (!ef) return $.noop;
-		return ef[fn] ? ef[fn] : $.noop;
-	},
-
-	//切换面板
+		//切换面板
 	_switchPanel: function (toIndex, fromIndex) {
-		if (this.ineffective) return;
+		if (this._ineffective) return;
 
 		var panelInfo = this._getPanelInfo(toIndex, fromIndex);
-		this._effectFunction('switchPanel').call(this, panelInfo);
+		this._invokeEffect('switchPanel', panelInfo);
 	},
 
 	_onRenderAutoplay: function (auto) {
@@ -123,11 +123,12 @@ var Switahable = SwitchableBasic.extend({
 	},
 
 	destroy: function () {
-		this._effectFunction('destroy').call(this);
+		this._invokeEffect('destroy');
 	}
 });
 
 module.exports = Switahable;
 
+require('class/class-loader').register('switchable/switchable', Switahable);
 // Helpers
 // -------

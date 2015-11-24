@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+</head>
+
+
+<body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+<p>
+  我是子页面
+  <script>document.write('(' + location.protocol + '//' + location.host + ')');</script>
+</p>
+
+<p>
+  <input id="message">
+  <input type="button" id="send" value="发送给父页面">
+</p>
+<pre id="output">来自父页面的消息:</pre>
+
+<script>
+var Messenger = FNX.include('messenger/messenger');
+
+var messenger = new Messenger('iframe1', 'demo');
+messenger.addTarget(window.parent, 'parent');
+
+// 通过点击按钮发送消息
+var send = $('#send');
+var message = $('#message');
+var output = $('#output');
+send.click(function() {
+    messenger.targets['parent'].send(message.val());
+    //messenger.send();  // 这样会发给所有 targets
+    message.val('');
+});
+
+// 监听消息
+messenger.listen(function(msg) {
+    console.log('收到', msg);
+    output.html(output.html() + ' ' + msg);
+});
+
+</script>
+
+<style>body{background:#DAF5FF;padding:15px;}</style>
+</body>
+
+</html>

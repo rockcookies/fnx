@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Base &amp; Widget 参考手册-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../readme.html" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../readme.html">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Base &amp; Widget 参考手册</h1>
+		<p>let`s rock</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<blockquote>
+<p>Bazinga！Bazinga！Bazinga！ <em>「 The Big Bang Theory 」Sheldon</em></p>
+</blockquote>
+<p><img src="images/sheldon-01.jpg" alt="-_-"></p>
+<h1 id="base">Base<a href="#base" class="anchor">¶</a></h1><h2 id="是什么">是什么<a href="#是什么" class="anchor">¶</a></h2><blockquote>
+<p>基础类, 集成了 <code>Class</code>, <code>Attrs</code>, <code>Events</code>, <code>Aspect</code> 这四部分的所有特性. 一旦自定义类继承了 <code>Base</code>, 你就可以使用这四部分提供的所有 API.</p>
+<p>接下来, 简单地介绍下这四部分.</p>
+</blockquote>
+<h2 id="class">Class<a href="#class" class="anchor">¶</a></h2><p>提供简洁的 OO 实现.</p>
+<div class="highlight"><pre><code class="javascript"><span class="comment">// 1) 创建一个类</span>
+<span class="keyword">var</span> Class = FNX.include(<span class="string">'class/class'</span>);
+
+<span class="keyword">var</span> SomeClass = Class.create({
+    <span class="comment">// 扩展自哪个类</span>
+    Extends: Animal,
+    <span class="comment">// 把别人的方法和属性搬过来放到 SomeClass.prototype 上</span>
+    Implements: Flyable,
+    <span class="comment">// 类的静态属性, 放到 SomeClass 上</span>
+    Statics: {
+        COLOR: <span class="string">'red'</span>
+    },
+    <span class="comment">// 初始化, 会在实例化对象时自动调用</span>
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    }
+});
+
+<span class="comment">// 2) Class.create(parent, {}) 的 parent 参数等价于上面例子中的 Extends</span>
+<span class="keyword">var</span> SomeClass = Class.create(Animal, {});
+
+<span class="comment">// 3) Class 创建出来的类具有 extend 方法, 可再次扩展出其他子类</span>
+<span class="keyword">var</span> OtherClass = SomeClass.extend({
+    <span class="comment">// 覆盖父类方法</span>
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="comment">// 注意: 需要手工调用父类的初始化过程</span>
+        OtherClass.superclass.initialize.call(<span class="keyword">this</span>);
+
+        <span class="comment">// do my stuff</span>
+    },
+    <span class="comment">// 也可以覆盖父类的 Implements, Statics 等</span>
+    Implements: Swimming,
+    Statics: {
+        COLOR: <span class="string">'green'</span>,
+        WIDTH: <span class="number">1</span>
+    }
+});
+
+<span class="comment">// 4) Class 创建出来的类具有 implement 方法, 作用是和定义类时的 Implements 相同,</span>
+<span class="comment">// 将其他对象的方法原样搬过来.</span>
+SomeClass.implement({
+     method1: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>}
+});
+
+<span class="comment">// 5) Class(fn) 将现有 Function 对象转成 Class 类.</span>
+<span class="keyword">var</span> EmptyClass = Class(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>});</code></pre></div><p>Base 类就是用 <code>Class.create</code> 创建, <code>Implements</code> 了 <code>Events</code>, <code>Attrs</code>, <code>Aspect</code> 这三部分. 另外, Base 增加了 <code>destroy</code> 方法, 相对于 <code>initialize</code> , 主要用于处理在实例销毁时的扫尾工作.</p>
+<h2 id="events">Events<a href="#events" class="anchor">¶</a></h2><blockquote>
+<p>提供基本的事件添加, 移除和触发功能.</p>
+</blockquote>
+<p>继承自 Base 的类, 自动具有 Events 的这三个 API:</p>
+<ul>
+<li><code>obj.on(event, callback, [context])</code> 添加事件</li>
+<li><code>obj.off([event], [callback], [context])</code> 移除事件</li>
+<li><code>obj.trigger(event, [*args])</code> 触发事件</li>
+</ul>
+<h2 id="aspect">Aspect<a href="#aspect" class="anchor">¶</a></h2><p>简单提供了两个 API:</p>
+<ul>
+<li><code>obj.before(methodName, callback, [context])</code> 在 obj.methodName 执行之前先执行 callback</li>
+<li><code>obj.after(methodName, callback, [context])</code> 在 obj.methodName 执行之后再执行 callback</li>
+</ul>
+<p>注意点:</p>
+<ul>
+<li>before 的 callback 若返回 <code>false</code>, 会阻止原函数的执行.</li>
+<li>before 和 after 是按注册的先后顺序执行的, 先注册先执行.</li>
+</ul>
+<h2 id="attrs">Attrs<a href="#attrs" class="anchor">¶</a></h2><blockquote>
+<p>对类属性的统一管理.</p>
+</blockquote>
+<p>首先, 类的 attrs 和 property 虽然都可翻译成属性, 但我们要着重说明下两者的不同概念和使用场景:</p>
+<ul>
+<li><p>attrs 是指存储在类 attrs 对象中的, 通过 get/set 接口来读写的属性, 一般是可以外部传入的配置属性;</p>
+</li>
+<li><p>property 是指直接放在实例上的, 可直接读写的公共或私有属性, 可以是临时变量, 如 obj._originStyle, 也可以是需要暴露出去的关键属性, 如 obj.element, obj.length 等;</p>
+</li>
+</ul>
+<p>推荐是使用 attrs 来统一定义和管理类属性.</p>
+<h3 id="如何定义">如何定义<a href="#如何定义" class="anchor">¶</a></h3><ol>
+<li>统一定义在类的 <code>attrs</code> 对象上.</li>
+</ol>
+<div class="highlight"><pre><code class="javascript">Base.extend({
+    attrs: {
+        attr1: <span class="number">1</span>
+    }
+});</code></pre></div><ol>
+<li>几种定义方式:</li>
+</ol>
+<div class="highlight"><pre><code class="javascript">{
+    <span class="comment">// 方式一: 直接设置默认值</span>
+    attr1: <span class="string">"aString"</span>,
+
+    <span class="comment">// 方式二: 通过 value 设置默认值, 等价于方式一</span>
+    attr2: {
+        value: <span class="string">"bString"</span>
+    },
+
+    <span class="comment">// 方式三: 设置 setter</span>
+    attr3: {
+        value: <span class="string">"cString"</span>,
+        <span class="comment">// setter 会在实例调用 set() 时触发, 可以在此时做些处理,</span>
+        <span class="comment">// 比如强制类型转换</span>
+        <span class="comment">// 即当 obj.set("attr3", 1) 后, 会调用 setter, 转换成 '1'</span>
+        <span class="comment">// setter 的 this 为当前实例</span>
+        setter: <span class="function"><span class="keyword">function</span><span class="params">(v)</span> {</span>
+            <span class="keyword">return</span> v + <span class="string">""</span>
+        }
+    },
+
+    <span class="comment">// 方式四: 设置 getter</span>
+    attr4: {
+        value: <span class="number">10</span>,
+        <span class="comment">// getter 会在实例调用 get() 时触发, 同样可以在此时做些处理,</span>
+        <span class="comment">// 比如存的是美元, 转成人民币</span>
+        <span class="comment">// 即当 obj.get("attr4") 后, 会调用 getter</span>
+        <span class="comment">// getter 的 this 为当前实例</span>
+        getter: <span class="function"><span class="keyword">function</span><span class="params">(v)</span> {</span>
+            <span class="comment">// 美元 * 汇率 = 人民币</span>
+            <span class="keyword">return</span> v * <span class="number">6.8</span>
+        }
+    },
+
+    <span class="comment">// 方式五: readOnly 只读属性</span>
+    attr5: {
+        value: <span class="number">0</span>,
+        <span class="comment">// 设置 readOnly 之后, 没法通过 obj.set() 的方式设置值, 即不可更改属性值</span>
+        <span class="comment">// 但可以设置 getter 来调整</span>
+        <span class="comment">// 默认 readOnly 为 false</span>
+        readOnly: <span class="literal">true</span>,
+        getter: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+            <span class="keyword">return</span> Math.ceil(<span class="keyword">this</span>.get(<span class="string">'panels'</span>).length / <span class="keyword">this</span>.get(<span class="string">'step'</span>));
+        }
+    }
+}</code></pre></div><ol>
+<li>设置 <code>propsInAttrs</code> 之后, 会把 <code>attrs</code> 中同名的 <code>attribute</code> 直接添加到 <code>this</code> 上.</li>
+</ol>
+<div class="highlight"><pre><code class="javascript">Base.extend({
+    propsInAttrs: [<span class="string">'element'</span>],
+    attrs: {
+        element: <span class="literal">null</span>
+    }
+});
+
+<span class="comment">// 即当初始化后 this.element = this.get('element')</span>
+<span class="comment">// 注意: 初始化后 this.element 等于 this.get('element'), 但之后再设置各自值, 不会相互同步</span></code></pre></div><h3 id="attrs-的读写操作">Attrs 的读写操作<a href="#attrs-的读写操作" class="anchor">¶</a></h3><ol>
+<li><code>obj.set(key, value, options)</code> 设置某个属性的值, 并触发<code>change:x</code> 事件.</li>
+</ol>
+<p>options.silent: 默认为 <code>false</code>. <code>true</code> 时不会触发 <code>change:x</code> 事件.
+options.override: 默认为 <code>false</code>. 当 value 为一个复杂对象, 默认会递归 merge. 为 <code>true</code> 时, 强制覆盖原值, 不进行 merge.</p>
+<div class="highlight"><pre><code class="javascript">obj.set(<span class="string">'attr1'</span>, {
+    <span class="string">'name'</span>: <span class="string">'fnx'</span>,
+    <span class="string">'version'</span>: <span class="string">'1.0'</span>
+});
+
+obj.set(<span class="string">'attr1'</span>, {
+    <span class="string">'family'</span>: <span class="string">'alipay'</span>
+}, {
+    override: <span class="literal">true</span>
+});</code></pre></div><ol>
+<li><code>obj.get(key)</code> 获取某个属性的值.</li>
+</ol>
+<p>在实例化时, 会:</p>
+<ul>
+<li>根据传入的配置属性, 自动设置各属性, 且不会触发 <code>change:x</code> 事件</li>
+<li>自动注册类的 <code>_onChangeX</code> 方法到 <code>change:x</code> 事件的回调队列中</li>
+</ul>
+<h2 id="生命周期">生命周期<a href="#生命周期" class="anchor">¶</a></h2><p><strong>这些操作对于使用者来说, 是透明的, 所以你不用关心去初始化属性.</strong></p>
+<p><img src="images/base-life-cycle.png" alt="-_-"></p>
+<h2 id="使用场景">使用场景<a href="#使用场景" class="anchor">¶</a></h2><blockquote>
+<p>哪些情况下使用 Base?</p>
+</blockquote>
+<p>满足以下条件的两个即可使用 Base:</p>
+<ul>
+<li>具有比较多的属性</li>
+<li>需要事件支持</li>
+<li>需要 Aspect</li>
+</ul>
+<blockquote>
+<p>哪些不需要?</p>
+</blockquote>
+<ul>
+<li>组件功能上比较单一, 比较独立, 比如 <code>Messager</code>, <code>Position</code></li>
+<li>暴露的接口也不多</li>
+<li>需要外部提供的东西也不多</li>
+</ul>
+<p>建议你直接使用 <code>Class.create</code> 创建类, 再 Implements 你需要的 <code>Attrs</code>, <code>Events</code>, <code>Aspect</code>. 或者, 更加简单的功能, 直接 <code>function</code> 定义就好.</p>
+<p>其他一些使用建议
+尽可能统一管理变量, 作为 <code>attrs</code> 中的 attribute, 而不是 property
+推荐使用 <code>_onChangeX</code>, 不需要用户手工绑定 <code>change:x</code> 事件</p>
+<h2 id="推荐范例">推荐范例<a href="#推荐范例" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyClass = Base.extend({
+    attrs: {
+        element: $(<span class="string">'input#name'</span>),
+        name: {
+            value: <span class="string">''</span>,
+            setter: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+                <span class="keyword">return</span> val || <span class="string">''</span>
+            },
+            getter: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+                <span class="keyword">return</span> val + <span class="string">''</span>
+            }
+        }
+    },
+    propsInAttrs: [<span class="string">'element'</span>],
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">(options)</span> {</span>
+        MyClass.superclass.initialize.call(<span class="keyword">this</span>, options);
+
+        <span class="keyword">var</span> that = <span class="keyword">this</span>;
+
+        <span class="keyword">this</span>._async = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+            that.set(<span class="string">'name'</span>, that.element.val(), {
+                silent: <span class="literal">true</span>
+            });
+        };
+
+        <span class="keyword">this</span>.element.on(<span class="string">'change'</span>, <span class="keyword">this</span>._async);
+    },
+    say: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        alert(<span class="keyword">this</span>.get(<span class="string">'name'</span>));
+    },
+    destroy: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.element.off(<span class="string">'change'</span>, <span class="keyword">this</span>._async);
+
+        MyClass.superclass.destroy.call(<span class="keyword">this</span>);
+    },
+
+    _onChangeName: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+        <span class="keyword">this</span>.element.val(val);
+    }
+});
+
+<span class="comment">// use MyClass like:</span>
+my = <span class="keyword">new</span> MyClass();
+
+my.before(<span class="string">'say'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="keyword">if</span> (!<span class="keyword">this</span>.get(<span class="string">'name'</span>)) <span class="keyword">return</span> <span class="literal">false</span>;
+});
+
+my.set(<span class="string">'name'</span>, <span class="string">'fnx'</span>);
+
+setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    my.element.val(<span class="string">'change name with fnx js'</span>);
+    my.element.change();
+    my.say();
+
+
+    my.element.val(<span class="string">''</span>);
+    my.element.change();
+    my.say();
+
+    my.destroy();
+}, <span class="number">3000</span>);</code></pre></div><h1 id="widget">Widget<a href="#widget" class="anchor">¶</a></h1><h2 id="是什么2">是什么<a href="#是什么2" class="anchor">¶</a></h2><blockquote>
+<p>Widget 是 UI 组件的基础类, 约定了组件的基本生命周期. 继承自 Base, 拥有 Base 的一切功能外, 还提供了其他一些通用功能. Widget 组件具有四个要素: 描述状态的 attribute 和 property, 描述行为的 event 和 method.</p>
+</blockquote>
+<h2 id="生命周期2">生命周期<a href="#生命周期2" class="anchor">¶</a></h2><p>Widget 有一套完整的生命周期, 控制着组件从创建, 到正式渲染, 再到销毁的整个过程.</p>
+<p>整个过程如下图所示:
+<img src="images/widget-life-cycle.png" alt="-_-"></p>
+<h2 id="初始化">初始化<a href="#初始化" class="anchor">¶</a></h2><h3 id="this-cid">this.cid<a href="#this-cid" class="anchor">¶</a></h3><p>该值为组件实例在当前页面上的唯一标识. 在之后的渲染, 赋值在 <code>this.element</code> 的 <code>data-widget-cid</code> 属性上.</p>
+<h3 id="父类初始化">父类初始化<a href="#父类初始化" class="anchor">¶</a></h3><p>在解析 data-api 之后, 执行父类 Base 的 attribute 的初始化, 包含设置属性和绑定属性事件.</p>
+<h3 id="this-element">this.element<a href="#this-element" class="anchor">¶</a></h3><p>一个正常的 UI 组件在 DOM 中一定有个根 DIV, 这就是 this.element.</p>
+<p>它可以是已有的 DOM 元素, 也可以是根据 template 创建的一个新 DOM 元素.</p>
+<div class="highlight"><pre><code class="javascript"><span class="comment">// 1) 使用已有 DOM 元素</span>
+<span class="keyword">var</span> o1 = <span class="keyword">new</span> Widget({
+    element: <span class="string">'#b'</span>
+});
+
+console.log(o1.element);
+
+<span class="comment">// 2) 从 template 中创建</span>
+<span class="keyword">var</span> o2 = <span class="keyword">new</span> Widget({
+    template: <span class="string">'&lt;div style="width: 100px;color: red;"&gt;目标元素1&lt;/div&gt;'</span>,
+    parentNode: <span class="string">'#c'</span>
+});
+
+console.log(o2.element);</code></pre></div><p>在 Widget 初始化结束后, this.element 已经存在, 但未必在 DOM 树中. 不存在 DOM 中的 this.element 只有在调用 <code>this.render()</code> 后才真正插入到文档流. 默认插入到 <code>document.body</code>, 可以通过 <code>parentNode</code> 指定.</p>
+<h3 id="this-initprops">this.initProps()<a href="#this-initprops" class="anchor">¶</a></h3><p>负责 properties 的初始化, 提供给子类覆盖.</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    attrs: {
+        width: <span class="number">100</span>,
+        height: <span class="number">200</span>
+    },
+    initProps: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.length = <span class="keyword">this</span>.get(<span class="string">'width'</span>) * <span class="keyword">this</span>.get(<span class="string">'height'</span>);
+    }
+});</code></pre></div><h3 id="this-events">this.events<a href="#this-events" class="anchor">¶</a></h3><p>如果你设置了 <code>this.events</code>, 那么会在初始化时默认绑定这些事件.</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    attrs: {
+        inputClass: <span class="string">'ui-input'</span>,
+        itemClass: <span class="string">'ui-form-item'</span>
+    },
+    events: {
+        <span class="string">'mouseenter .{{attrs.inputClass}}'</span>: <span class="string">'mouseenter'</span>,
+        <span class="string">'mouseleave .{{attrs.inputClass}}'</span>: <span class="string">'mouseleave'</span>,
+        <span class="string">'focus .{{attrs.itemClass}} input,textarea,select'</span>: <span class="string">'focus'</span>,
+        <span class="string">'blur .{{attrs.itemClass}} input,textarea,select'</span>: <span class="string">'blur'</span>
+    }
+});</code></pre></div><h3 id="this-setup">this.setup()<a href="#this-setup" class="anchor">¶</a></h3><p>专为子类提供的初始化接口, 可以直接覆盖定义.</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    attrs: {
+        inputClass: <span class="string">'ui-input'</span>,
+        itemClass: <span class="string">'ui-form-item'</span>
+    },
+    events: {
+        <span class="string">'mouseenter .{{attrs.inputClass}}'</span>: <span class="string">'mouseenter'</span>,
+        <span class="string">'mouseleave .{{attrs.inputClass}}'</span>: <span class="string">'mouseleave'</span>,
+        <span class="string">'focus .{{attrs.itemClass}} input,textarea,select'</span>: <span class="string">'focus'</span>,
+        <span class="string">'blur .{{attrs.itemClass}} input,textarea,select'</span>: <span class="string">'blur'</span>
+    },
+
+    setup: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="comment">// todo: init sth</span>
+    }
+});</code></pre></div><h2 id="this-render">this.render()<a href="#this-render" class="anchor">¶</a></h2><p>渲染的过程:</p>
+<ul>
+<li>让 attrs 中属性的初始值生效, 其中, 默认空值( null 或 undefined )不触发</li>
+<li>绑定 <code>_onRenderXXX</code> 到 change:attr 事件上</li>
+</ul>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    attrs: {
+        class: <span class="string">'ui-form-item'</span>
+    },
+
+    _onRenderClass: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+        <span class="keyword">this</span>.element.addClass(val);
+    }
+});
+
+<span class="keyword">var</span> my = <span class="keyword">new</span> MyWidget({
+    element: <span class="string">'#b'</span>
+});
+my.render();</code></pre></div><h3 id="why">why?<a href="#why" class="anchor">¶</a></h3><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> sth = <span class="keyword">new</span> SomeWidget();
+sth.render();</code></pre></div><p>为何 new 的时候不直接 render ? 非得调用一次 <code>render()</code>?</p>
+<p>render 这一步操作从初始化中独立出来, 是因为考虑到有些组件在初始化的时候并不想操作 DOM, 比如 Dialog. 初始化只是准备, 只有当真正显示(渲染)时才需要插入到 DOM 中.</p>
+<p>如果希望实例化的时候就渲染到页面上, 可在 <code>setup()</code> 里直接调用 <code>this.render()</code>.</p>
+<h3 id="样式隔离">样式隔离<a href="#样式隔离" class="anchor">¶</a></h3><p>为了避免同组件引入样式的冲突问题, 在 <code>this.render()</code> 时, 会给 <code>this.element</code> 包裹一个 DIV, 并给这个 DIV 添加形如 <code>famliy-name-version</code> 的样式类, 定义的 CSS 也会加此前缀. 这样就能避免样式冲突问题. <strong>这步操作对开发者是透明的</strong></p>
+<h3 id="onchangex-与-onrenderx">_onChangeX() 与 _onRenderX()<a href="#onchangex-与-onrenderx" class="anchor">¶</a></h3><p>如果你的类都定义了 <code>_onChangeX</code> 与 <code>_onRenderX</code>, 当 <code>obj.set(&#39;x&#39;, &#39;a new value&#39;)</code> 之后, 触发 <code>change:x</code> 后都会执行这两个处理函数. 但两者的区别是:</p>
+<p>绑定时机不同: <code>_onChangeX</code> 是实例初始化后绑定的, <code>_onRenderX</code> 是在实例 render 之后才绑定的
+用途也稍有不同: <code>_onRenderX</code> 是对 x 改变后触发 UI 的变化, 而 <code>_onChangeX</code> 范围更广些.</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    attrs: {
+        class: <span class="literal">null</span>,
+        count: <span class="number">0</span>
+    },
+    events: {
+        <span class="string">'click'</span>: <span class="string">'click'</span>
+    },
+
+    click: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.set(<span class="string">'class'</span>, <span class="string">'class-three'</span>);
+        console.log(<span class="keyword">this</span>.get(<span class="string">"count"</span>), my.get(<span class="string">"class"</span>));
+    },
+    _onChangeClass: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+        <span class="keyword">this</span>.set(<span class="string">'count'</span>, <span class="keyword">this</span>.get(<span class="string">'count'</span>) + <span class="number">1</span>);
+    },
+    _onRenderClass: <span class="function"><span class="keyword">function</span><span class="params">(val)</span> {</span>
+        <span class="keyword">this</span>.element.addClass(val);
+    }
+});
+<span class="keyword">var</span> my = <span class="keyword">new</span> MyWidget({
+    template: <span class="string">'&lt;div style="background: #efefef;width: 100px;height: 100px;"&gt;text&lt;/div&gt;'</span>
+});
+my.set(<span class="string">"class"</span>, <span class="string">"class-one"</span>);
+console.log(my.get(<span class="string">"count"</span>), my.get(<span class="string">"class"</span>));
+
+setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    my.render();
+    console.log(my.get(<span class="string">"count"</span>), my.get(<span class="string">"class"</span>));
+
+    setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        my.set(<span class="string">"class"</span>, <span class="string">"class-two"</span>);
+        console.log(my.get(<span class="string">"count"</span>), my.get(<span class="string">"class"</span>));
+    }, <span class="number">6000</span>);
+}, <span class="number">6000</span>);</code></pre></div><h2 id="this-destroy">this.destroy()<a href="#this-destroy" class="anchor">¶</a></h2><p>Widget 默认绑定了 window 的 <code>unload</code> 事件, 当页面 <code>unload</code> 时, 触发当前页面上所有 Widget 实例的 <code>destroy()</code>.</p>
+<h2 id="其他方法">其他方法<a href="#其他方法" class="anchor">¶</a></h2><h3 id="this-selector">this.$(selector)<a href="#this-selector" class="anchor">¶</a></h3><p>在 Widget 根元素 this.element 下查找符合选择器的元素</p>
+<h3 id="this-delegateevents">this.delegateEvents()<a href="#this-delegateevents" class="anchor">¶</a></h3><p>前文提到的在初始化过程中, 可以通过 <code>this.events</code> 在初始化时绑定事件. 在初始化之后, 可以通过 <code>this.delegateEvents()</code> 代理事件. 事件默认绑定在 <code>this.element</code> 上.</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> myWidget = <span class="keyword">new</span> Widget();
+
+<span class="comment">// 1) 事件代理在 `element` 上</span>
+myWidget.delegateEvents({
+  <span class="string">'click p'</span>: <span class="string">'fn1'</span>,
+  <span class="string">'click li'</span>: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>}
+})
+
+<span class="comment">// 2) 事件代理在 `element` 上</span>
+myWidget.delegateEvents(<span class="string">'click p'</span>, fn1)
+myWidget.delegateEvents(<span class="string">'click p'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>})
+
+<span class="comment">// 3) 代理在 `element` 以外的 DOM 上</span>
+myWidget.delegateEvents(<span class="string">'#trigger'</span>, <span class="string">'click p'</span>, fn1)
+<span class="comment">// 等价于 `$('#trigger').on('click', 'p', fn1)`</span>
+myWidget.delegateEvents($(<span class="string">'#trigger'</span>), <span class="string">'click'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>})
+
+<span class="comment">// 4) 删除事件代理</span>
+myWidget.undelegateEvents();
+myWidget.undelegateEvents(events);
+myWidget.undelegateEvents(element, events);</code></pre></div><p>提供此 API, 是为了统一管理组件的所有事件. 这在销毁组件时, 可以方便地解绑所有事件以防止内存泄露. 强烈推荐使用此 API 来绑定元素事件.</p>
+<h3 id="widget-query">Widget.query()<a href="#widget-query" class="anchor">¶</a></h3><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> dlg = Widget.query(<span class="string">'selector'</span>)</code></pre></div><p>用于查找对应 selector 的 DOM 节点关联起来的 Widget 对象.</p>
+<h2 id="使用场景2">使用场景<a href="#使用场景2" class="anchor">¶</a></h2><blockquote>
+<p>如何选择使用 Base 还是 Widget?</p>
+</blockquote>
+<ul>
+<li>和 UI 紧密相关, 需要创建, 修改, 删除 DOM 节点的, 使用 Widget</li>
+<li>衡量下如果仅使用 Base 就够了, 那就不要使用 Widget</li>
+</ul>
+<h2 id="推荐范例2">推荐范例<a href="#推荐范例2" class="anchor">¶</a></h2><div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> MyWidget = Widget.extend({
+    attrs: {
+        name: <span class="string">''</span>
+    },
+    setup: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.delegateEvents(<span class="string">'click'</span>, <span class="keyword">this</span>.say);
+
+        <span class="keyword">this</span>.render();
+
+        <span class="keyword">this</span>.before(<span class="string">'show'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+            <span class="keyword">if</span> (!<span class="keyword">this</span>.get(<span class="string">'name'</span>)) <span class="keyword">return</span> <span class="literal">false</span>;
+        });
+        <span class="keyword">this</span>.before(<span class="string">'say'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+            <span class="keyword">if</span> (!<span class="keyword">this</span>.get(<span class="string">'name'</span>)) <span class="keyword">return</span> <span class="literal">false</span>;
+        });
+    },
+    show: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.element.show();
+    },
+    hide: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.element.hide();
+    },
+    say: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        alert(<span class="keyword">this</span>.get(<span class="string">'name'</span>));
+    },
+
+    _onRenderName: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">this</span>.element.html(<span class="keyword">this</span>.get(<span class="string">'name'</span>));
+    }
+});
+
+<span class="keyword">var</span> my = <span class="keyword">new</span> MyWidget({
+    template: <span class="string">'&lt;div class="name-title" style="display: none;"&gt;&lt;/div&gt;'</span>
+});
+my.show();
+
+setTimeout(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    my.set(<span class="string">'name'</span>, <span class="string">'hi, fnx'</span>);
+    my.show();
+}, <span class="number">5000</span>);</code></pre></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>

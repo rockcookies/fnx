@@ -1,13 +1,15 @@
 var $ = require('$'),
     Popup = require('popup/popup'),
     Events = require('events/events'),
-    Templatable = require('templatable/templatable');
+    Templatable = require('templatable/templatable'),
+    DragSupport = require('./dialog/drag');
 
 var BUTTONS_TEMPLATE = {
 	confirm : {
 		role : 'confirm',
 		cls : 'ui-dialog-button-orange',
-		text : '确定'
+		text : '确定',
+		autofocus: true
 	},
 	cancel : {
 		role : 'cancel',
@@ -26,10 +28,10 @@ var Dialog = Popup.extend({
 
 	attrs :{
 	    // 模板
-	    template: require('./dialog.tpl'),
+	    template: require('html!./dialog/dialog.tpl'),
 
 	    // 标题
-	    title: '默认标题',
+	    title: '对话框',
 
 	    // 按钮
 	    buttons : null,
@@ -68,26 +70,7 @@ var Dialog = Popup.extend({
 		initialWidth: 500,
 
 		// 是否自适应
-		autoFit: true,
-
-		// 默认定位左右居中，略微靠上
-		align: {
-			value: {
-					selfXY: ['50%', '50%'],
-					baseXY: ['50%', '42%']
-			},
-			getter: function (val) {
-				// 高度超过窗口的 42/50 浮层头部顶住窗口
-				// https://github.com/aralejs/dialog/issues/41
-				if (this.element.height() > $(window).height() * 0.84) {
-					return {
-						selfXY: ['50%', '0'],
-						baseXY: ['50%', '0']
-					};
-				}
-				return val;
-			}
-		}
+		autoFit: true
 	},
 
 	parseElement: function () {
@@ -116,18 +99,14 @@ var Dialog = Popup.extend({
 	},
 
 	events: {
-		'click [data-role=close]': function (e) {
+		'click [data-role="close"]': function (e) {
 			e.preventDefault();
 			this.hide();
 		},
-		'click [data-role=confirm]': function (e) {
+		'click [data-role^="operation-"]': function (e) {
 			e.preventDefault();
-			this.trigger('confirm');
-		},
-		'click [data-role=cancel]': function (e) {
-			e.preventDefault();
-			this.trigger('cancel');
-			this.hide();
+			var op = $(e.target).attr('data-role').substring('operation-'.length);
+			this.trigger(op);
 		}
 	},
 
@@ -139,6 +118,70 @@ var Dialog = Popup.extend({
 	setup: function () {
 		Dialog.superclass.setup.call(this);
 		this._setupKeyEvents();
+		this._setupEffects();
+		this._setupDrag();
+	},
+
+	// 绑定键盘事件，ESC关闭窗口
+	_setupKeyEvents: function () {
+		$(document).on('keydown', {that:this} , this._esc);
+
+		this.before('destroy', function () {
+			$(document).off('keydown', this._esc);
+		});
+	},
+
+	// 设置效果
+	_setupEffects: function () {
+		var classPrefix = this.get('classPrefix');
+
+		this.after('show', function () {
+			this.element.addClass(classPrefix + '-show');
+
+			if (this.get('hasMask')) {
+				this.element.addClass(classPrefix + '-modal');
+			}
+		});
+
+		this.after('hide', function () {
+			this.element.removeClass(classPrefix + '-show');
+		});
+
+		this.after('focus', function () {
+			this.element.addClass(classPrefix + '-focus');
+		});
+
+		this.after('blur', function () {
+			this.element.removeClass(classPrefix + '-focus');
+		});
+	},
+
+	// 设置拖拽
+	_setupDrag: function () {
+		this.delegateEvents(this.element.find('[data-role="title"]'), DragSupport.types.start, function (event) {
+			this.focus();
+			DragSupport.create(this.element[0], event);
+		});
+	},
+
+	// ESC 快捷键关闭对话框
+	_esc: function (event) {
+		var target = event.target;
+		var nodeName = target.nodeName;
+		var rinput = /^input|textarea$/i;
+		var keyCode = event.keyCode;
+		var that = event.data.that;
+
+		if (keyCode != 27) {
+			return;
+		}
+
+		// 避免输入状态中 ESC 误操作关闭
+		if (!that.isTop() || rinput.test(nodeName) && target.type !== 'button') {
+			return;
+		}
+
+		that.get('visible') && that.hide();
 	},
 
 	// onRender
@@ -189,15 +232,6 @@ var Dialog = Popup.extend({
 		this._setPosition();
 	},
 
-	// 绑定键盘事件，ESC关闭窗口
-	_setupKeyEvents: function () {
-		this.delegateEvents($(document), 'keyup.esc', function (e) {
-			if (e.keyCode === 27) {
-				this.get('visible') && this.hide();
-			}
-		});
-	},
-
 	_showIframe: function () {
 		var that = this;
 		// 若未创建则新建一个
@@ -224,7 +258,7 @@ var Dialog = Popup.extend({
 
 			if (that.get('autoFit') && !that._isCrossDomainIframe) {
 				!that.get('height') && that.contentElement.height(getIframeHeight(that.iframe));
-				!that.get('width') && that.contentElement.width(getIframeHeight(that.iframe));
+				!that.get('width') && that.contentElement.width(getIframeWidth(that.iframe));
 			}
 
 			that._setPosition();
@@ -314,6 +348,9 @@ var Dialog = Popup.extend({
 });
 
 
+// Utils
+// ----
+
 Dialog.alert = function (title, content, callback, options) {
 	var defaults = {
 		content: content,
@@ -362,6 +399,8 @@ Dialog.show = function(content, callback, options){
 
 
 module.exports = Dialog;
+
+require('class/class-loader').register('popup/dialog', module.exports);
 
 // Helpers
 // ----

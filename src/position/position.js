@@ -10,6 +10,8 @@ var Position = exports,
     ua = (window.navigator.userAgent || "").toLowerCase(),
     isIE6 = ua.indexOf("msie 6") !== -1;
 
+require('class/class-loader').register('position/position', Position);
+
 
 // 将目标元素相对于基准元素进行定位
 // 这是 Position 的基础方法，接收两个参数，分别描述了目标元素和基准元素的定位点

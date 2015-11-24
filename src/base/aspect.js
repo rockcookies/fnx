@@ -17,6 +17,8 @@ exports.after = function(methodName, callback, context) {
   return weave.call(this, 'after', methodName, callback, context);
 };
 
+require('class/class-loader').register('base/aspect', module.exports);
+
 
 // Helpers
 // -------

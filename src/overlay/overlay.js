@@ -1,6 +1,6 @@
 var $ = require("$"),
     Position = require("position/position"),
-    Shim = require("iframe-shim/iframe-shim"),
+    DomEvents = require('events/dom/dom-events'),
     Widget = require("widget/widget");
 
 
@@ -52,8 +52,6 @@ var Overlay = Widget.extend({
 
   setup: function () {
     var that = this;
-    // 加载 iframe 遮罩层并与 overlay 保持同步
-    this._setupShim();
     // 窗口resize时，重新定位浮层
     this._setupResize();
 
@@ -76,7 +74,6 @@ var Overlay = Widget.extend({
   destroy: function () {
     // 销毁两个静态数组中的实例
     erase(this, Overlay.allOverlays);
-    erase(this, Overlay.blurOverlays);
     return Overlay.superclass.destroy.call(this);
   },
 
@@ -121,38 +118,10 @@ var Overlay = Widget.extend({
     return this;
   },
 
-  // 加载 iframe 遮罩层并与 overlay 保持同步
-  _setupShim: function () {
-    var shim = new Shim(this.element);
-
-    // 在隐藏和设置位置后，要重新定位
-    // 显示后会设置位置，所以不用绑定 shim.sync
-    this.after('hide _setPosition', shim.sync, shim);
-
-    // 除了 parentNode 之外的其他属性发生变化时，都触发 shim 同步
-    var attrs = ['width', 'height'];
-    for (var attr in attrs) {
-      if (attrs.hasOwnProperty(attr)) {
-        this.on('change:' + attr, shim.sync, shim);
-      }
-    }
-
-    // 在销魂自身前要销毁 shim
-    this.before('destroy', shim.destroy, shim);
-  },
-
   // resize窗口时重新定位浮层，用这个方法收集所有浮层实例
   _setupResize: function () {
     Overlay.allOverlays.push(this);
     this.on('windowResize', this._onWindowResize);
-  },
-
-  // 除了 element 和 relativeElements，点击 body 后都会隐藏 element
-  _blurHide: function (arr) {
-    arr = $.makeArray(arr);
-    arr.push(this.element);
-    this._relativeElements = arr;
-    Overlay.blurOverlays.push(this);
   },
 
   // 用于 set 属性后的界面更新
@@ -183,38 +152,20 @@ var Overlay = Widget.extend({
 
 });
 
-// 绑定 blur 隐藏事件
-Overlay.blurOverlays = [];
-$(document).on('click', function (e) {
-  hideBlurOverlays(e);
-});
-
 // 绑定 resize 重新定位事件
-var timeout;
-var winWidth = $(window).width();
-var winHeight = $(window).height();
 Overlay.allOverlays = [];
 
-$(window).resize(function () {
-  timeout && clearTimeout(timeout);
-  timeout = setTimeout(function () {
-    var winNewWidth = $(window).width();
-    var winNewHeight = $(window).height();
-
-    // IE678 莫名其妙触发 resize
-    // http://stackoverflow.com/questions/1852751/window-resize-event-firing-in-internet-explorer
-    if (winWidth !== winNewWidth || winHeight !== winNewHeight) {
-      $(Overlay.allOverlays).each(function (i, item) {
-        item.trigger('windowResize', winNewWidth, winNewHeight);
-      });
-    }
-
-    winWidth = winNewWidth;
-    winHeight = winNewHeight;
-  }, 80);
+DomEvents.on('window:resize', function (data) {
+  $(Overlay.allOverlays).each(function (i, item) {
+    item.trigger('windowResize', data.width, data.height);
+  });
 });
 
 module.exports = Overlay;
+
+
+require('class/class-loader').register('overlay/overlay', module.exports);
+
 
 
 // Helpers
@@ -222,26 +173,6 @@ module.exports = Overlay;
 
 function isInDocument(element) {
   return $.contains(document.documentElement, element);
-}
-
-function hideBlurOverlays(e) {
-  $(Overlay.blurOverlays).each(function (index, item) {
-    // 当实例为空或隐藏时，不处理
-    if (!item || !item.get('visible')) {
-      return;
-    }
-
-    // 遍历 _relativeElements ，当点击的元素落在这些元素上时，不处理
-    for (var i = 0; i < item._relativeElements.length; i++) {
-      var el = $(item._relativeElements[i])[0];
-      if (el === e.target || $.contains(el, e.target)) {
-        return;
-      }
-    }
-
-    // 到这里，判断触发了元素的 blur 事件，隐藏元素
-    item.hide();
-  });
 }
 
 // 从数组中删除对应元素

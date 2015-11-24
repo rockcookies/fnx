@@ -5,6 +5,8 @@
 //  - https://github.com/joyent/node/blob/master/lib/events.js
 
 
+var Lang = require('lang/lang');
+
 // Regular expression used to split event strings
 var eventSplitter = /\s+/
 
@@ -21,6 +23,7 @@ var eventSplitter = /\s+/
 function Events() {
 }
 
+require('class/class-loader').register('events/events', Events);
 
 // Bind one or more space separated events, `events`, to a `callback`
 // function. Passing `"all"` will bind the callback to all events fired.
@@ -90,7 +93,7 @@ Events.prototype.off = function(events, callback, context) {
 // (unless you're listening on `"all"`, which will cause your callback to
 // receive the true name of the event as the first argument).
 Events.prototype.trigger = function(events) {
-  var cache, event, all, list, i, len, rest = [], args, returned = true;
+  var cache, event, all, list, i, len, rest = [], returned = true;
   if (!(cache = this.__events)) return this
 
   events = events.split(eventSplitter)
@@ -120,32 +123,17 @@ Events.prototype.trigger = function(events) {
   return returned
 }
 
-Events.prototype.emit = Events.prototype.trigger
-
 
 // Helpers
 // -------
 
-var keys = Object.keys
-
-if (!keys) {
-  keys = function(o) {
-    var result = []
-
-    for (var name in o) {
-      if (o.hasOwnProperty(name)) {
-        result.push(name)
+var keys = Lang.keys,
+    isFunction = Lang.isFunction,
+    forEach = function (arr, cb) {
+      for (var i=0;i<arr.length;i++) {
+        cb(arr[i]);
       }
-    }
-    return result
-  }
-}
-
-function forEach(array,fn){
-  for(var i=0;i<array.length;i++){
-    fn(array[i]);
-  }
-}
+    };
 
 // Mix `Events` to object instance or Class function.
 Events.mixTo = function(receiver) {
@@ -196,10 +184,6 @@ function triggerEvents(list, args, context) {
   }
   // trigger will return false if one of the callbacks return false
   return pass;
-}
-
-function isFunction(func) {
-  return Object.prototype.toString.call(func) === '[object Function]'
 }
 
 module.exports = Events

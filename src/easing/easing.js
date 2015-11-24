@@ -184,3 +184,4 @@ module.exports = Easing;
 // 也可以直接通过 jQuery.easing 来使用
 var $ = require('$');
 $.extend($.easing, Easing);
+require('class/class-loader').register('easing/easing', Easing);

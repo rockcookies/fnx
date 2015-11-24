@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="">
+<head>
+	<meta charset="UTF-8" />
+	<title>Base-飞牛前端UED</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="nico 0.5.2" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<script type="text/javascript">
+		var ctx = '../../';
+	</script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../static/css/site.css" />
+ <link rel="stylesheet" href="../../static/css/fnx.min.css" />
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../static/js/fnx.min.js"></script>
+
+
+</head>
+
+
+<body>
+<header class="navbar navbar-default navbar-static-top doc-nav">
+	<div class="container">
+		<div class="navbar-header">
+			<a href="../../readme.html" class="logo"><i class="logo-icon"></i><span>FNX UI</span></a>
+
+			<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#fnx-navbar" aria-controls="fnx-navbar" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<nav id="fnx-navbar" class="navbar-collapse collapse" aria-expanded="false">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="../../readme.html">首页</a></li>
+				<li><a href="../../tutorial/readme.html">快速上手</a></li>
+				<li><a href="../readme.html">文档</a></li>
+				<li><a href="https://github.com/Rockcookies/fnx">GITHUB</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class="doc-header">
+	<div class="container">
+		<h1>Base</h1>
+		<p>Base 是一个基础类，提供 <a href="../class/class.html">Class</a>、<a href="../events/events.html">Events</a>、<a href="attrs.html">Attrs</a> 和 <a href="aspect.html">Aspect</a> 支持。</p>
+	</div>
+</div>
+
+<div class="doc-body">
+	<div class="container">
+		<div class="row">
+			<div id="doc-nav" class="col-md-3 doc-sidebar hidden-sm hidden-xs" data-role="aside">
+				<ul class="nav" data-spy="affix" data-offset-top="330"></ul>
+			</div>
+
+			<div id="doc-content" class="col-md-9 doc-content" data-role="main">
+<h1 id="使用说明">使用说明<a href="#使用说明" class="anchor">¶</a></h1><h2 id="extend-base-extend-properties">extend <code>Base.extend(properties)</code><a href="#extend-base-extend-properties" class="anchor">¶</a></h2><p>基于 Base 创建子类。例子：</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Base = FNX.include(<span class="string">'base/base'</span>);
+
+<span class="keyword">var</span> Pig = Base.extend({
+    attrs: {
+        name: <span class="string">''</span>
+    },
+    talk: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        alert(<span class="string">'我是'</span> + <span class="keyword">this</span>.get(<span class="string">'name'</span>));
+    }
+});</code></pre></div><p>继承 Base 可覆盖 initialize 构造函数， <strong>但需要调用父类构造函数</strong>，如 FNX 的 widget 定义了组件的生命周期</p>
+<div class="highlight"><pre><code class="javascript"><span class="keyword">var</span> Base = FNX.include(<span class="string">'base/base'</span>);
+
+<span class="keyword">var</span> Widget = Base.extend({
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">(config)</span> {</span>
+        Widget.superclass.initialize.call(<span class="keyword">this</span>, config);
+        <span class="keyword">this</span>.parseElement()
+        <span class="keyword">this</span>.initProps()
+        <span class="keyword">this</span>.delegateEvents()
+        <span class="keyword">this</span>.setup()
+    },
+    ...
+});</code></pre></div><p>Base 继承和混入了一下功能，可查看文档 ：</p>
+<ul>
+<li><a href="../class/class.html">Class 使用文档</a></li>
+<li><a href="../events/events.html">Events 使用文档</a></li>
+<li><a href="attrs.html">Attrs 使用文档</a></li>
+<li><a href="aspect.html">Aspect 使用文档</a></li>
+</ul>
+<h2 id="base-与-class-的关系">Base 与 Class 的关系<a href="#base-与-class-的关系" class="anchor">¶</a></h2><p>Base 是使用 <code>Class</code> 创建的一个基础类，默认混入了 <code>Events</code>、<code>Attrs</code>、<code>Aspect</code> 模块：</p>
+<div class="highlight"><pre><code class="javascript"><span class="comment">/* base.js */</span>
+<span class="keyword">var</span> Core = FNX.include(<span class="string">'base/base'</span>);
+<span class="keyword">var</span> Class = FNX.include(<span class="string">'class/class'</span>);
+<span class="keyword">var</span> Events = FNX.include(<span class="string">'events/events'</span>);
+<span class="keyword">var</span> Aspect = FNX.include(<span class="string">'base/aspect'</span>);
+<span class="keyword">var</span> Attrs = FNX.include(<span class="string">'base/attrs'</span>);
+
+<span class="keyword">var</span> Base = Class.create({
+    Implements: [Events, Aspect, Attrs],
+
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">(config)</span> {</span>
+        ...
+    },
+
+    ...
+});
+
+...</code></pre></div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<footer class="doc-footer">
+	<a href="../../">飞牛武汉UED</a><br>愿景: 成为业界卓越的UED团队！
+</footer>
+
+<script type="text/javascript" src="../../static/js/site.js"></script>
+
+
+</body>
+
+</html>
